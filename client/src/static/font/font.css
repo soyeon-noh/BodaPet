@@ -1,0 +1,10 @@
+/*
+  src: 사용할 폰트의 위치 및 형식c
+     Safari, Android, iOS => ttf
+     Modern Browsers => woff
+     IE6-IE8 => eot
+*/
+@font-face {
+  font-family: "Jalnan";
+  src: url(./JalnanOTF.otf) format("truetype");
+}

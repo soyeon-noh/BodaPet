@@ -1,14 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import "tailwindcss/tailwind.css";
+// 폰트가 안돼서 일단 임시방편
+import "../src/static/font/font.css";
 
-ReactDOM.render(
-  <React.StrictMode>
+const rootNode = document.getElementById("root");
+
+ReactDOM.createRoot(rootNode).render(
+  <BrowserRouter>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
