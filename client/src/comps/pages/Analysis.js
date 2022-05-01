@@ -9,6 +9,7 @@ const Analysis = () => {
   const goNext = (num) => {
     const pageNum = num + 1;
     const path = "/analysis" + pageNum;
+    console.log("뭐임..?", pageNum);
     navigate(path);
   };
 
