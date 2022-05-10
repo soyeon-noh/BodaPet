@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useActiveNaviStore from "./zustand/ActiveNaviStore";
 
 const MainNav = () => {
-  const [activeNav, setActiveNav] = useState();
+  // 나중에 데이터를 사용하여 중복을 최소화하게 만들어보자.
+  // const navContent = [
+  //   { index: 1, text: "CCTV" },
+  //   { index: 2, text: "영상분석" },
+  //   { index: 3, text: "분석결과" },
+  //   { index: 4, text: "마이페이지" },
+  // ];
+
+  const { activeNav, setActiveNav } = useActiveNaviStore();
+
   return (
     <nav class="mb-3">
       <ul class="flex justify-between ">
