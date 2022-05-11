@@ -17,7 +17,7 @@ const Analysis = () => {
       <div class="bg-main py-6 ">
         <div class="max-w-sm mx-auto">
           <div class="text-left pt-14">
-            <h3 class="text-2xl font-extrabold text-md">
+            <h3 class="inline mx-3 text-2xl font-extrabold text-md">
               영상을
               <br />
               선택해주세요

@@ -43,6 +43,7 @@ const Analysis3 = () => {
   ]);
 
   const onClickDelete = (id) => {
+    console.log("아이디 들어옴?", id);
     let filtered = dataList.filter((element) => element !== id);
   };
 
@@ -53,7 +54,7 @@ const Analysis3 = () => {
           <FontAwesomeIcon icon={faCircleCheck} color={data.color} />
           <span class="inline-bolck ml-5 mr-20">{data.name}</span>
           <FontAwesomeIcon
-            onClick={() => onClickDelete}
+            onClick={() => onClickDelete(data.id)}
             icon={faTrashCan}
             color={data.color}
           />
@@ -80,7 +81,7 @@ const Analysis3 = () => {
       <div class="bg-main py-6 ">
         <div class="max-w-sm mx-auto">
           <div class="text-left pt-14">
-            <h3 class="text-2xl font-extrabold text-md">
+            <h3 class="inline-block mx-3 text-2xl font-extrabold text-md">
               영역을
               <br />
               추가해주세요

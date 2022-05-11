@@ -14,7 +14,7 @@ const MainNav = () => {
   const { activeNav, setActiveNav } = useActiveNaviStore();
 
   return (
-    <nav class="mb-3">
+    <nav class="mb-3 mx-3">
       <ul class="flex justify-between ">
         <li
           class={`${

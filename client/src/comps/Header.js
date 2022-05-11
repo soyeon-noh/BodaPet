@@ -10,7 +10,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header class="pt-4 pb-2 text-3xl flex justify-between">
+    <header class="pt-4 pb-2 mx-3 text-3xl flex justify-between">
       <div>
         <Link to="/" onClick={() => setActiveNav("")}>
           보다펫

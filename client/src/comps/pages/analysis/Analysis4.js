@@ -73,7 +73,7 @@ const Analysis4 = () => {
       <div class="bg-main py-6 ">
         <div class="max-w-sm mx-auto">
           <div class="text-left pt-14">
-            <h3 class="text-2xl font-extrabold text-md">
+            <h3 class="inline-block mx-3 text-2xl font-extrabold text-md">
               영역을
               <br />
               영상 위에 그려주세요
@@ -98,7 +98,7 @@ const Analysis4 = () => {
         </button>
         <button
           onClick={() => goNext()}
-          class="animate-bounce block w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class=" block w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           결과 보기
         </button>

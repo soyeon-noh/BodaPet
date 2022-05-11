@@ -17,7 +17,9 @@ const Report = () => {
       <div class="bg-main py-2 ">
         <div class="max-w-sm mx-auto">
           <div class="text-left pt-4">
-            <h3 class="text-2xl font-extrabold text-md">3.26.토 분석리포트</h3>
+            <h3 class="inline-block mx-3 text-2xl font-extrabold text-md">
+              3.26.토 <br />
+            </h3>
           </div>
         </div>
       </div>
