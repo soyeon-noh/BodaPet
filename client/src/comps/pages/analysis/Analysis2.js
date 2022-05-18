@@ -2,9 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import rectangle from "../../../static/image/rectangle.png";
 
-import { faClock, faCalendar } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 const Analysis2 = () => {
   const navigate = useNavigate();
 
