@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { faFileVideo } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAnalysisStore from "../../../zustand/AnalysisStore";
 
 const Analysis1 = () => {
   const navigate = useNavigate();
@@ -9,6 +10,10 @@ const Analysis1 = () => {
   const goNext = () => {
     navigate("/analysis2");
   };
+
+  const { analysis, setAnalysis } = useAnalysisStore();
+
+  console.log("우냐냐", analysis);
 
   return (
     <section>
