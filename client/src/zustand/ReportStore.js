@@ -2,12 +2,17 @@ import create from "zustand";
 
 const useReportStore = create((set) => ({
   report: {
-    id: "",
-    name: "",
-    password: "",
-    email: "",
+    date: "",
+    activity: "",
+    area: [
+      {
+        name: "",
+        value: "",
+      },
+    ],
+    video: "",
   },
-  setReport: (data) => set((state) => ({ report: data })),
+  setUser: (data) => set((state) => ({ user: data })),
 }));
 
 export default useReportStore;

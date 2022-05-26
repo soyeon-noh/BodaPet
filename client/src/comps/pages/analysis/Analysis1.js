@@ -13,7 +13,7 @@ const Analysis1 = () => {
 
   const { analysis, setAnalysis } = useAnalysisStore();
 
-  console.log("우냐냐", analysis);
+  console.log("analysis1 상태 확인", analysis);
 
   return (
     <section>

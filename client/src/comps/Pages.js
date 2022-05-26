@@ -1,4 +1,3 @@
-import { Result } from "postcss";
 import React from "react";
 import { Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
@@ -9,7 +8,8 @@ import Analysis3 from "./pages/analysis/Analysis3";
 import Analysis4 from "./pages/analysis/Analysis4";
 import Cctv from "./pages/Cctv";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Login from "./pages/user/Login";
+import Signup from "./pages/user/Signup";
 import Mypage from "./pages/Mypage";
 import Report from "./pages/Report";
 
@@ -19,6 +19,7 @@ const Pages = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/cctv" element={<Cctv />} />
         <Route path="/analysis" element={<Analysis />} />
         <Route path="/analysis1" element={<Analysis1 />} />
