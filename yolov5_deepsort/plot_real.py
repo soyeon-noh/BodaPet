@@ -39,7 +39,7 @@ def plot(save_txt_path, dir_path, im):
         globals()["ob_x{}".format(i)] = globals()["object{}".format(i)]['cx'].values.tolist()
         globals()["ob_y{}".format(i)] = globals()["object{}".format(i)]['cy'].values.tolist()
 
-    # 각 객체 별로 이동 경로 plot으로 형태로 출력 (색깔은 랜덤) 색깔은 우선 랜덤으로 했는데 custom_label 반복문으로 색깔 미리 지정해도 괜찮을듯?
+    # 각 객체 별로 이동 경로 plot으로 형태로 출력 (색깔은 랜덤)
     for i in np.sort(file['track_id'].unique()):
         use_color ="#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
         if use_color in colors:
