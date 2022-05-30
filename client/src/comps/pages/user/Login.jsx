@@ -4,20 +4,14 @@ import { Link } from "react-router-dom";
 import useUserStore from "../../../zustand/UserStore";
 
 const Login = () => {
-  const { user, setUser } = useUserStore();
+  const { user, onChangeHandler } = useUserStore();
 
   const navigate = useNavigate();
 
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-  };
-
   const login = () => {
-    // alert("로그인 성공");
-    // navigate("/");
     console.log("로그인 user", user);
     alert(`${user.id} 님 로그인 성공`);
+    navigate("/");
   };
 
   return (

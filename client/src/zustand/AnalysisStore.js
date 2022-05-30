@@ -3,9 +3,9 @@ import create from "zustand";
 const useAnalysisStore = create((set, get) => ({
   analysis: {
     videoPath: "",
+    petId: "",
     coordinate: [
       {
-        petId: "",
         areaName: "",
         x1: "",
         y1: "",
@@ -14,11 +14,13 @@ const useAnalysisStore = create((set, get) => ({
       },
     ],
   },
-  setAnalysis: (data) => set((state) => ({ analysis: data })),
-  onChangeHandler: (e) => {
-    const { name, value } = e.target;
-    get().setAnalysis({ ...get().analysis, [name]: value });
+  setAnalysis: (data) => {
+    set((state) => ({ analysis: data }));
   },
+  // onChangeHandler: (e) => {
+  //   const { name, value } = e.target;
+  //   get().setAnalysis({ ...get().analysis, [name]: value });
+  // },
 }));
 
 export default useAnalysisStore;

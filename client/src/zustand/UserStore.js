@@ -1,32 +1,29 @@
 import create from "zustand";
 
-const useUserStore = create((get, set) => ({
+const useUserStore = create((set, get) => ({
   user: {
-    id: "",
+    id: "id",
     name: "",
-    password: "",
+    password: "pw",
     passwordCheck: "",
     email: "",
   },
+  setUser: (name, value) => {
+    // console.log("setUser에 값이 들어오긴해 name", name);
+    // console.log("setUser에 값이 들어오긴해 value", value);
+    set((state) => ({ user: { ...get().user, [name]: value } }));
 
-  // setReport: (data) => set((state) => ({ report: data })),
-
-  setUser: (data) => {
-    console.log("setUser data: ", data);
-    set({ user: data });
+    console.log("setUser data: ", get().user);
   },
 
-  // setId: (data) => set({ id: data }),
-  // setName: (data) => set({ name: data }),
-  // setPassword: (data) => set({ password: data }),
-  // setPasswordCheck: (data) => set({ passwordCheck: data }),
-  // setEmail: (data) => set({ email: data }),
+  onChangeHandler: (e) => {
+    const { name, value } = e.target;
 
-  // onChangeHandler: (e) => {
-  //   const { name, value } = e.target;
-  //   setReport({ ...get().user, [name]: value });
-  //   console.log("괜찮아", name, value);
-  // },
+    set((state) => {
+      console.log("여기안와?");
+      get().setUser([name], value);
+    });
+  },
 }));
 
 export default useUserStore;
