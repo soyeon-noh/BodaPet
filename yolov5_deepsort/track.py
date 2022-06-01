@@ -284,9 +284,12 @@ def detect(opt):
 
     import move_iou
     print(move_iou.analysis(save_txt_path))
-    
+
     import visit_iou
     visit_iou.analysis(save_txt_path)
+
+    import heat_map
+    heat_map.make_heatmap(save_txt_path, dir_path, rgb_img)
 
 
 if __name__ == '__main__':
