@@ -1,11 +1,11 @@
+import sys
+
 print('파이썬 파일에 접근했습니다.')
 
 def func1(a):
     print('저는',a,'입니다')
 
 
-def func2(b):
-    print('저는 카레유 입니다')
 
 # import argparse
 # from pathlib import Path
@@ -22,3 +22,5 @@ def func2(b):
 # def main(**vars(opt)):
 #     print('성공')
 
+if __name__ == '__main__':
+    func1(sys.argv[1])
