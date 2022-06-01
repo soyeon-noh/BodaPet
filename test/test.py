@@ -1,9 +1,10 @@
+# -*- coding: utf8 -*-
 import sys
 
 print('파이썬 파일에 접근했습니다.')
 
-def func1(a):
-    print('저는',a,'입니다')
+# def func1(a):
+#     print('저는',a,'입니다')
 
 
 
@@ -22,5 +23,5 @@ def func1(a):
 # def main(**vars(opt)):
 #     print('성공')
 
-if __name__ == '__main__':
-    func1(sys.argv[1])
+# if __name__ == '__main__':
+#     func1(sys.argv[1])
