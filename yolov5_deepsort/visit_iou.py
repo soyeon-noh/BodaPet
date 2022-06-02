@@ -37,7 +37,7 @@ def IoU(box1, box2):
     return iou
 
 
-def analysis(save_txt_path):
+def analysis(save_txt_path, iou_fps):
 	file = df_file(save_txt_path)
 	file.drop(['2','3','4'], inplace=True, axis=1)
 
@@ -49,12 +49,6 @@ def analysis(save_txt_path):
 	place_list = np.array(place_list)
 	# [반려동물 별(접근 인덱스)[장소별(접근 인덱스) [방문시간, 횟수]]]
 	time_list = np.zeros((len(custom_labels), place_list.shape[0], 2)) 
-
-	# place_list.shape[0] : 지정위치 개수
-
-	# 프레임 별로 분석할 때, 내부 for문에서 장소에 따라 포함 여부와 시간을 측정하여
-	# 장소에 따른 시간과 횟수 담는 리스트를 생성하고, 내부에서 호출해서 
-
 
 	for i in range(len(custom_labels)):
 	    ### 각 클래스 별로 불러오기
@@ -90,8 +84,8 @@ def analysis(save_txt_path):
 	                    time_list[i, k, 1] += 1
 
 	    for n in range(len(place_list)):
-	        time_list[i, n, 0] = time_list[i, n, 0] / 60
+	        time_list[i, n, 0] = time_list[i, n, 0] / iou_fps
 	        if(time_list[i, n, 0] and time_list[i, n, 1]==0):
 	            time_list[i, n, 1] = 1
-# 	print(time_list)
+	# print(time_list)
 	return(time_list)

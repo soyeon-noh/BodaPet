@@ -51,6 +51,8 @@ a = 0
 
 rgb_img = 0
 
+iou_fps = 0
+
 
 def detect(opt):
     global a
@@ -141,6 +143,7 @@ def detect(opt):
     model.warmup(imgsz=(1 if pt else nr_sources, 3, *imgsz))  # warmup
     dt, seen = [0.0, 0.0, 0.0, 0.0], 0
     for frame_idx, (path, im, im0s, vid_cap, s) in enumerate(dataset):
+        iou_fps = round(vid_cap.get(cv2.CAP_PROP_FPS))
         if a == 0:
             rgb_img = np.asarray(im0s)
         a += 1
@@ -283,10 +286,10 @@ def detect(opt):
     plot_real.plot(save_txt_path, dir_path, rgb_img)
 
     import move_iou
-    print(move_iou.analysis(save_txt_path))
+    move_iou.analysis(save_txt_path, iou_fps)
 
     import visit_iou
-    visit_iou.analysis(save_txt_path)
+    visit_iou.analysis(save_txt_path, iou_fps)
 
     import heat_map
     heat_map.make_heatmap(save_txt_path, dir_path, rgb_img)
