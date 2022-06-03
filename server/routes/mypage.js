@@ -16,7 +16,9 @@ router.get("/", async (req, res, next) => {
 
   // 2. spawn을 통해 "python 파이썬파일.py" 명령어 실행
   const result = spawner("python", [
-    "/Users/soyeonnoh/Desktop/2022_workspace/Bodapet/test/test.py",
+    // "/Users/soyeonnoh/Desktop/2022_workspace/Bodapet/test/test.py",
+    // "../test/test.py",
+    "../yolov5_deepsort/yolov5/test.py",
   ]);
   // const result = spawn("python", ["../../test/test.py", "강낭콩"]);
   // 3. stdout의 'data'이벤트리스너로 실행결과를 받는다.
@@ -29,11 +31,11 @@ router.get("/", async (req, res, next) => {
     console.log("pythos code 에러발생", data.toString());
     res.json(data.toString());
   });
-  const 결과 = {
-    success: 1,
-    message: "완료",
-  };
-  res.json(결과);
+  // const 결과 = {
+  //   success: 1,
+  //   message: "완료",
+  // };
+  // res.json(결과);
 });
 
 export default router;
