@@ -21,6 +21,7 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 import numpy as np
+from custom_label import custom_labels
 
 from yolov5.models.experimental import attempt_load
 from yolov5.utils.downloads import attempt_download
@@ -50,6 +51,8 @@ global a
 a = 0
 
 rgb_img = 0
+
+iou_fps = 0
 
 
 def detect(opt):
@@ -141,6 +144,7 @@ def detect(opt):
     model.warmup(imgsz=(1 if pt else nr_sources, 3, *imgsz))  # warmup
     dt, seen = [0.0, 0.0, 0.0, 0.0], 0
     for frame_idx, (path, im, im0s, vid_cap, s) in enumerate(dataset):
+        iou_fps = round(vid_cap.get(cv2.CAP_PROP_FPS))
         if a == 0:
             rgb_img = np.asarray(im0s)
         a += 1
@@ -235,7 +239,7 @@ def detect(opt):
 
                         if save_vid or save_crop or show_vid:  # Add bbox to image
                             c = int(cls)  # integer class
-                            label = f'{id:0.0f} {names[c]} {conf:.2f}'
+                            label = f'{custom_labels[int(id)-1]} {names[c]} {conf:.2f}'
                             annotator.box_label(bboxes, label, color=colors(c, True))
                             if save_crop:
                                 txt_file_name = txt_file_name if (isinstance(path, list) and len(path) > 1) else ''
@@ -283,10 +287,10 @@ def detect(opt):
     plot_real.plot(save_txt_path, dir_path, rgb_img)
 
     import move_iou
-    print(move_iou.analysis(save_txt_path))
+    move_iou.analysis(save_txt_path, iou_fps)
 
     import visit_iou
-    visit_iou.analysis(save_txt_path)
+    visit_iou.analysis(save_txt_path, iou_fps)
 
     import heat_map
     heat_map.make_heatmap(save_txt_path, dir_path, rgb_img)
