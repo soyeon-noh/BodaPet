@@ -18,8 +18,9 @@ router.get("/", async (req, res, next) => {
   const result = spawner("python", [
     // "/Users/soyeonnoh/Desktop/2022_workspace/Bodapet/test/test.py",
     "../test/test.py",
-    "hi",
-    "hello",
+    // "hi",
+    // "hello",
+    ////////////
     // "../yolov5_deepsort/yolov5/test.py",
     // "test_source",
     // "test_name",

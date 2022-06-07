@@ -13,6 +13,10 @@ import mypageRouter from "./routes/mypage.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import session from "express-session";
+import passport from "passport";
+import passportLocalMongoose from "passport-local-mongoose";
+
 const app = express();
 
 // Disable the fingerprinting of this web technology. 경고
@@ -53,6 +57,20 @@ const corsOption = {
   credentials: true,
 };
 app.use(cors(corsOption));
+
+// Session 설정
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(
+  session({
+    key: "wit",
+    secret: process.env["SESSION_SECRET"], // .env
+    cookie: { secure: false, httpOnly: false, maxAge: oneDay },
+    // 세션을 (변경되지 않아도) 언제나 저장할 것인가? false 권장
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 // Router 설정
 app.use("/", indexRouter);
