@@ -21,6 +21,7 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 import numpy as np
+from custom_label import custom_labels
 
 from yolov5.models.experimental import attempt_load
 from yolov5.utils.downloads import attempt_download
@@ -238,7 +239,7 @@ def detect(opt):
 
                         if save_vid or save_crop or show_vid:  # Add bbox to image
                             c = int(cls)  # integer class
-                            label = f'{id:0.0f} {names[c]} {conf:.2f}'
+                            label = f'{custom_labels[int(id)-1]} {names[c]} {conf:.2f}'
                             annotator.box_label(bboxes, label, color=colors(c, True))
                             if save_crop:
                                 txt_file_name = txt_file_name if (isinstance(path, list) and len(path) > 1) else ''
