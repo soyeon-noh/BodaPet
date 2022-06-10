@@ -18,7 +18,6 @@ const Home = () => {
       <div class="max-w-xs mx-auto py-6 flex flex-col">
         <div class="shadow-md px-6 py-5 mb-2 hover:bg-main cursor-pointer">
           <h1 class="text-2xl my-3">CCTV</h1>
-          <FontAwesomeIcon icon="fa-regular fa-camera-cctv" />
           <h3 class="text-sm">
             웹캠을 통해 실시간으로
             <br />

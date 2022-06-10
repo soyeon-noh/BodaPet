@@ -1,5 +1,5 @@
 import express from "express";
-import * as userDetails from "../comp/userDetails.js";
+import * as userDetails from "../passport/userDetails.js";
 
 const router = express.Router();
 

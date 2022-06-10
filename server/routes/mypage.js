@@ -1,46 +1,53 @@
 import express from "express";
-import { ChildProcess } from "child_process";
+import PET from "../models/pet.js";
+import multerUpload from "../config/fileUploadConfig.js";
+import { login } from "../passport/userDetails.js";
 
 const router = express.Router();
 
-// child process 의 spawn이 가져와지지 않는다.
-// ES6 관련 이슈인가 싶어 module 모듈의 createRequire 기능을 사용
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const spawner = require("child_process").spawn;
-
 /* GET users listing. */
 router.get("/", async (req, res, next) => {
-  // 1. child-process모듈의 spawn 취득
-  // const spawner = ChildProcess.spawn;
-
-  // 2. spawn을 통해 "python 파이썬파일.py" 명령어 실행
-  const result = spawner("python", [
-    // "/Users/soyeonnoh/Desktop/2022_workspace/Bodapet/test/test.py",
-    "../test/test.py",
-    // "hi",
-    // "hello",
-    ////////////
-    // "../yolov5_deepsort/yolov5/test.py",
-    // "test_source",
-    // "test_name",
-  ]);
-  // const result = spawn("python", ["../../test/test.py", "강낭콩"]);
-  // 3. stdout의 'data'이벤트리스너로 실행결과를 받는다.
-  result.stdout.on("data", function (data) {
-    console.log("python code 실행결과", data.toString());
-    res.json(data.toString());
-  });
-  console.log("여기?3");
-  result.stderr.on("data", function (data) {
-    console.log("pythos code 에러발생", data.toString());
-    res.json(data.toString());
-  });
-  // const 결과 = {
-  //   success: 1,
-  //   message: "완료",
-  // };
-  // res.json(결과);
+  res.send("/mypage/   respond with a resource");
 });
 
+router.get("/pet", async (req, res, next) => {
+  // 로그인 성공시 변경할 코드
+  // const user = req.user;
+  const user = { userId: "test" };
+  const pets = await PET.find({ userId: user.userId });
+  console.log("pet get 데이터", pets);
+
+  res.json({ pets });
+});
+
+router.post("/pet", async (req, res, next) => {
+  // 로그인 성공시 변경할 코드
+  // const user = req.user;
+  const user = { userId: "test" };
+  console.log("pet post 데이터- ", req.body);
+  console.log("pet req.file 데이터- ", req.file);
+  const petJson = req.body;
+
+  // pet 데이터 수정 후
+
+  await PET.create(petJson);
+  res.json({ success: true });
+});
+
+router.post("/video", multerUpload.single("file"), async (req, res, next) => {
+  console.log("req: ", req);
+  console.log("비디오패치에 넘겨온 req.file: ", req.file);
+  console.log("비디오패치에 넘겨온 req.body: ", req.body);
+
+  // console.log("폼에 정의된 필드명 : ", reqFile.fieldname);
+  // console.log("사용자가 업로드한 파일 명 : ", reqFile.originalname);
+  // console.log("파일의 엔코딩 타입 : ", reqFile.encoding);
+  // console.log("파일의 Mime 타입 : ", reqFile.mimetype);
+  // console.log("파일이 저장된 폴더 : ", reqFile.destination);
+  // console.log("destinatin에 저장된 파일 명 : ", reqFile.filename);
+  // console.log("업로드된 파일의 전체 경로 ", reqFile.path);
+  // console.log("파일의 바이트(byte 사이즈)", reqFile.size);
+
+  res.json({ videoPath: req.file.path });
+});
 export default router;

@@ -11,8 +11,8 @@ const ReportSchema = mongoose.Schema(
     createdTime: { type: String },
     activity: { type: String },
 
-    video_path: { type: String },
-    heatmap_path: { type: String },
+    videoPath: { type: String },
+    heatmaPath: { type: String },
 
     area: [
       {

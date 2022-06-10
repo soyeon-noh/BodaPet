@@ -15,9 +15,31 @@ import dotenv from "dotenv";
 
 import session from "express-session";
 import passport from "passport";
-import passportLocalMongoose from "passport-local-mongoose";
+import { Module } from "module";
 
 const app = express();
+
+// cors 설정
+const whiteURL = ["http://localhost:3000"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    const isWhiteURL = whiteURL.indexOf(origin) !== -1;
+    callback(null, isWhiteURL);
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+// 413 error 로 인한 body-parser 설정
+// https://stackoverflow.com/questions/19917401/error-request-entity-too-large
+app.use(express.json({ limit: "50mb" }));
+app.use(
+  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
+);
+
+// uploads 폴더에 접근
+app.use("/mypage/voide", express.static("detect_upload"));
+app.use("/mypage", express.static("detect_upload"));
 
 // Disable the fingerprinting of this web technology. 경고
 app.disable("x-powered-by");
@@ -47,23 +69,12 @@ mongoose.connect(process.env.NODEJS_APP_MONGOURL, {
   useUnifiedTopology: true,
 });
 
-// cors 설정
-const whiteURL = ["http://localhost:3000"];
-const corsOption = {
-  origin: (origin, callback) => {
-    const isWhiteURL = whiteURL.indexOf(origin) !== -1;
-    callback(null, isWhiteURL);
-  },
-  credentials: true,
-};
-app.use(cors(corsOption));
-
 // Session 설정
 const oneDay = 1000 * 60 * 60 * 24;
 
 app.use(
   session({
-    key: "wit",
+    key: "bodapet",
     secret: process.env["SESSION_SECRET"], // .env
     cookie: { secure: false, httpOnly: false, maxAge: oneDay },
     // 세션을 (변경되지 않아도) 언제나 저장할 것인가? false 권장
@@ -71,6 +82,23 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+// Passport 세팅
+// localStrategy
+Module.exports = (app) => {
+  app.use(passport.initialize());
+  app.use(passport.session());
+  // Serialize : 로그인 성공시 호출
+  passport.serializeUser((user, done) => {
+    // session에 사용자 정보가 저장, 두번째 인자 user가 deserializeUser로 전달
+    done(null, user);
+  });
+  // Deserialize : 서버에 요청이 있을 때마다 호출
+  passport.deserializeUser((user, done) => {
+    // req.user로 user의 값을 접근할 수 있게 된다.
+    done(null, user);
+  });
+};
 
 // Router 설정
 app.use("/", indexRouter);

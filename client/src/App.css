@@ -2,16 +2,17 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* color: #232323; */
+}
+
+header,
+nav,
+h1 {
+  font-family: "jalnan";
   color: #232323;
 }
 
-header {
-  font-family: "jalnan";
-}
-nav {
-  font-family: "jalnan";
-}
-
-h1 {
-  font-family: "jalnan";
+div,
+li {
+  color: #232323;
 }

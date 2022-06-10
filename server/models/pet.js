@@ -8,7 +8,7 @@ const petSchema = new Schema({
   id: { type: Number, default: 0 },
   userId: { type: String },
   name: { type: String },
-  video_path: { type: String },
+  videoPath: { type: String },
 });
 
 petSchema.plugin(autoIncrement.plugin, {
@@ -17,4 +17,4 @@ petSchema.plugin(autoIncrement.plugin, {
   startAt: 1,
   increment: 1,
 });
-export default mongoose.model("user", petSchema);
+export default mongoose.model("pet", petSchema);
