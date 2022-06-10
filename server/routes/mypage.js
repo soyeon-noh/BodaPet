@@ -1,8 +1,7 @@
 import express from "express";
 import PET from "../models/pet.js";
 import multerUpload from "../config/fileUploadConfig.js";
-import { login } from "../passport/userDetails.js";
-
+import request from "request"
 const router = express.Router();
 
 /* GET users listing. */
@@ -47,6 +46,45 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
   // console.log("destinatin에 저장된 파일 명 : ", reqFile.filename);
   // console.log("업로드된 파일의 전체 경로 ", reqFile.path);
   // console.log("파일의 바이트(byte 사이즈)", reqFile.size);
+
+
+  const YoloResult = (callback) =>{
+    const options = {
+      method: "GET",
+      uri: "http://localhost:5000/yolov5",
+      qs: {
+        "name" : "test name",
+        "filePath": "server/detect_upload/ruby.MOV"
+      }
+    }
+
+    request(options, (err, res, body)=>{
+      callback(undefined, {result:body})
+    })
+  }
+
+  YoloResult((err, {result}={})=>{
+    if(err){
+      console.log("error!!!")
+    }
+    console.log(`${result}!!!`)
+  })
+
+  // const yolov5Fetch = async() =>{ 
+  //   const res = await fetch(`http://localhost:5000/yolov5`, {
+  //   method:"POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: {"filePath": "test filepath"}
+  // })
+  // if(res.status === 404){
+  //   alert("flask 서버 yolov5 fetch 실패 ")
+  // }
+  // console.log("flask yolov5 fetch 실행완료",res.status);
+
+  // }
+  // yolov5Fetch();
 
   res.json({ videoPath: req.file.path });
 });
