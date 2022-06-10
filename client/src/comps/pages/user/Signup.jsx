@@ -59,7 +59,7 @@ const Signup = () => {
       alert("회원가입에 실패했습니다.");
       return;
     }
-    window.alert(`${user.userId} 님의 회원가입을 축하합니다.`);
+    alert(`${user.userId} 님의 회원가입을 축하합니다.`);
     navigate(`/`);
   };
 

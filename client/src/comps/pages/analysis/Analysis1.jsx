@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { faFileVideo } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,6 @@ const Analysis1 = () => {
   };
 
   const { analysis, setAnalysis } = useAnalysisStore();
-
   console.log("analysis1 상태 확인", analysis);
 
   return (

@@ -14,6 +14,7 @@ const useAnalysisStore = create((set, get) => ({
       },
     ],
   },
+
   setAnalysis: (data) => {
     set((state) => ({ analysis: data }));
   },
