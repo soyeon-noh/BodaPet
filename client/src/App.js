@@ -13,7 +13,7 @@ function App() {
     credentials: "include",
   };
   const test_fetch = async () => {
-    const res = await fetch("http://localhost:5000/mypage");
+    const res = await fetch("http://localhost:5050/mypage");
     const Jres = await res.json();
     console.log("test_fetch", Jres);
   };

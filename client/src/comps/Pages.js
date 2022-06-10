@@ -10,8 +10,9 @@ import Cctv from "./pages/Cctv";
 import Home from "./pages/Home";
 import Login from "./pages/user/Login";
 import Signup from "./pages/user/Signup";
-import Mypage from "./pages/Mypage";
+import Mypage from "./pages/mypage/Mypage";
 import Report from "./pages/Report";
+import PetInsert from "./pages/mypage/PetInsert";
 
 const Pages = () => {
   return (
@@ -28,6 +29,7 @@ const Pages = () => {
         <Route path="/analysis4" element={<Analysis4 />} />
         <Route path="/report" element={<Report />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/pet" element={<PetInsert />} />
       </Routes>
     </section>
   );
