@@ -148,7 +148,7 @@ const Mypage = () => {
             id="inputVideo"
             name="file"
             type="file"
-            // accept="video/*"
+            accept="video/*"
             class="hidden"
             onChange={videoFetch}
           />
