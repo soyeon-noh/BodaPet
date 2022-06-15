@@ -88,4 +88,26 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
 
   res.json({ videoPath: req.file.path });
 });
+
+router.get("/vgg", async (req, res, next) => {
+  const YoloResult = (callback) => {
+    const options = {
+      method: "GET",
+      uri: "http://localhost:5000/vgg",
+    };
+
+    request(options, (err, res, body) => {
+      callback(undefined, { result: body });
+    });
+  };
+
+  YoloResult((err, { result } = {}) => {
+    if (err) {
+      console.log("error!!!");
+    }
+    console.log(`${result}!!!`);
+  });
+
+  res.send("성공");
+});
 export default router;

@@ -46,6 +46,15 @@ const Mypage = () => {
   //   // 결과를  ["2022-02-02", "2022-02-02", "2022-02-10"] 형태로 변환해야함
   // };
 
+  const vggFetch = async () => {
+    console.log("vgg Fetch 진입");
+    const vggRes = await fetch(`http://localhost:5050/mypage/vgg`);
+
+    if (vggRes.status == 200) {
+      alert("vgg성공");
+    }
+  };
+
   return (
     <section>
       <div class="bg-main py-6 ">
@@ -61,6 +70,7 @@ const Mypage = () => {
           </ul>
         </div>
       </div>
+      <button onClick={vggFetch}>테스트버튼 vgg </button>
       <div class="max-w-xs mx-auto py-6">
         <div class="max-w-xs mx-auto py-2">
           <Calendar
