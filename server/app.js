@@ -9,6 +9,7 @@ import indexRouter from "./routes/index.js";
 import userRouter from "./routes/user.js";
 import reportRouter from "./routes/report.js";
 import mypageRouter from "./routes/mypage.js";
+import analysisRouter from "./routes/analysis.js";
 
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -105,6 +106,7 @@ app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/report", reportRouter);
 app.use("/mypage", mypageRouter);
+app.use("/analysis", analysisRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

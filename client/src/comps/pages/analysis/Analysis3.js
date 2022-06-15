@@ -6,12 +6,14 @@ import {
   faCircle,
   faCircleCheck,
   faTrashCan,
-  faPlusSquare,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAnalysisStore from "../../../zustand/AnalysisStore";
 
 const Analysis3 = () => {
   const navigate = useNavigate();
+
+  const { areaList, setAreaList, setFilteredAreaList } = useAnalysisStore();
 
   const goPrevious = () => {
     navigate("/analysis2");
@@ -21,33 +23,35 @@ const Analysis3 = () => {
     navigate("/analysis4");
   };
 
-  const [dataList, setDataList] = useState([
-    {
-      id: 1,
-      name: "물그릇 영역",
-      color: "blue",
-      checked: false,
-    },
-    {
-      id: 2,
-      name: "밥그릇 영역",
-      color: "orange",
-      checked: false,
-    },
-    {
-      id: 3,
-      name: "화장실 영역",
-      color: "green",
-      checked: false,
-    },
-  ]);
+  const color = ["red", "orange", "green", "blue", "purple"];
 
-  const onClickDelete = (id) => {
-    console.log("아이디 들어옴?", id);
-    let filtered = dataList.filter((element) => element !== id);
+  const [area, setArea] = useState({ name: "" });
+
+  const settingArea = (e) => {
+    const { name, value } = e.target;
+
+    setArea({ [name]: value });
+    console.log("settingArea", area);
   };
 
-  const showAreaList = dataList.map((data) => {
+  const insertArea = () => {
+    const areaInfo = {
+      id: areaList.length + 1,
+      name: area.name,
+      color: color.at(areaList.length + 1),
+    };
+
+    setAreaList(areaInfo);
+
+    setArea("");
+  };
+
+  const onClickDelete = (id) => {
+    let filtered = areaList.filter((element) => element.id !== id);
+    setFilteredAreaList(filtered);
+  };
+
+  const showAreaList = areaList.map((data) => {
     if (data.checked) {
       return (
         <div>
@@ -61,16 +65,18 @@ const Analysis3 = () => {
         </div>
       );
     } else {
-      console.log("미야옹", data.color);
       return (
-        <div>
-          <FontAwesomeIcon icon={faCircle} color={data.color} />
-          <span class="inline-bolck ml-5 mr-20">{data.name}</span>
-          <FontAwesomeIcon
-            onClick={() => onClickDelete}
-            icon={faTrashCan}
-            color={data.color}
-          />
+        <div class="felx flex-col justify-between">
+          <div class="inline-block">
+            <FontAwesomeIcon icon={faCircle} color={data.color} />
+          </div>
+          <div class="inline-block text-left ml-5 mr-7 w-2/5">{data.name}</div>
+          <div
+            class="inline-block cursor-pointer"
+            onClick={() => onClickDelete(data.id)}
+          >
+            <FontAwesomeIcon icon={faTrashCan} color={data.color} />
+          </div>
         </div>
       );
     }
@@ -95,7 +101,25 @@ const Analysis3 = () => {
           src={rectangle}
           width="320" // 최대로보이는 숫자넣음 수정필요
         />
-        <div class="shadow-lg p-7 mb-2 text-center">{showAreaList}</div>
+        <div class="shadow-lg p-7 mb-2 text-center">
+          {showAreaList}
+          <div class="felx flex-col mt-8">
+            <input
+              name="name"
+              type="text"
+              value={area.name || ""}
+              placeholder="영역 이름"
+              class="shadow appearance-none w-3/5 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={settingArea}
+            />
+            <button
+              class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-3 border border-gray-400 rounded shadow"
+              onClick={() => insertArea()}
+            >
+              추가
+            </button>
+          </div>
+        </div>
       </div>
       <div class="flex justify-between max-w-xs mx-auto">
         <button

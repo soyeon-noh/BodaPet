@@ -1,7 +1,8 @@
 import express from "express";
 import PET from "../models/pet.js";
-import multerUpload from "../config/fileUploadConfig.js";
-import request from "request"
+import multerUpload from "../config/detectFileUploadConfig.js";
+import request from "request";
+
 const router = express.Router();
 
 /* GET users listing. */
@@ -47,30 +48,29 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
   // console.log("업로드된 파일의 전체 경로 ", reqFile.path);
   // console.log("파일의 바이트(byte 사이즈)", reqFile.size);
 
-
-  const YoloResult = (callback) =>{
+  const YoloResult = (callback) => {
     const options = {
       method: "GET",
       uri: "http://localhost:5000/yolov5",
       qs: {
-        "name" : "test name",
-        "filePath": "server/detect_upload/ruby.MOV"
-      }
+        name: "test name",
+        filePath: "server/detect_upload/ruby.MOV",
+      },
+    };
+
+    request(options, (err, res, body) => {
+      callback(undefined, { result: body });
+    });
+  };
+
+  YoloResult((err, { result } = {}) => {
+    if (err) {
+      console.log("error!!!");
     }
+    console.log(`${result}!!!`);
+  });
 
-    request(options, (err, res, body)=>{
-      callback(undefined, {result:body})
-    })
-  }
-
-  YoloResult((err, {result}={})=>{
-    if(err){
-      console.log("error!!!")
-    }
-    console.log(`${result}!!!`)
-  })
-
-  // const yolov5Fetch = async() =>{ 
+  // const yolov5Fetch = async() =>{
   //   const res = await fetch(`http://localhost:5000/yolov5`, {
   //   method:"POST",
   //   headers: {

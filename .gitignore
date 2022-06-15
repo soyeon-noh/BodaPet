@@ -126,3 +126,7 @@ dist
 .tern-port
 
 
+
+# 파일들
+.mov
+.rtf

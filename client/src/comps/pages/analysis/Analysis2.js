@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import rectangle from "../../../static/image/rectangle.png";
+import useAnalysisStore from "../../../zustand/AnalysisStore";
 
 const Analysis2 = () => {
   const navigate = useNavigate();
@@ -12,6 +13,9 @@ const Analysis2 = () => {
   const goNext = () => {
     navigate("/analysis3");
   };
+
+  const { analysis, setAnalysis, onChangeHandler } = useAnalysisStore();
+
   return (
     <section>
       <div class="bg-main py-6 ">
@@ -36,13 +40,23 @@ const Analysis2 = () => {
             <label class="inline-block ml-0 mr-auto">
               {/* <FontAwesomeIcon icon={faCalendar} color="#909090" /> */}
             </label>
-            <input type="date" name="date" class="inline-block w-25" />
+            <input
+              type="date"
+              name="date"
+              class="inline-block w-25"
+              onChange={onChangeHandler}
+            />
           </div>
           <div>
             <label class="inline-block w-25">
               {/* <FontAwesomeIcon icon={faClock} color="#909090" /> */}
             </label>
-            <input type="time" name="time" class="inline-block w-25" />
+            <input
+              type="time"
+              name="time"
+              class="inline-block w-25"
+              onChange={onChangeHandler}
+            />
           </div>
         </div>
       </div>

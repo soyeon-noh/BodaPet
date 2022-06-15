@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { faFileVideo } from "@fortawesome/free-regular-svg-icons";
+import {
+  faFileVideo,
+  faCheckCircle,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAnalysisStore from "../../../zustand/AnalysisStore";
 
@@ -13,6 +16,60 @@ const Analysis1 = () => {
 
   const { analysis, setAnalysis } = useAnalysisStore();
   console.log("analysis1 상태 확인", analysis);
+
+  const [videoFile, setVideoFile] = useState(false);
+
+  const videoFetch = async () => {
+    // 영상 데이터 가져오기
+    const videoData = document.getElementById("inputVideo").files[0];
+
+    setVideoFile(videoData.name);
+
+    // formData 객체에 append
+    const formData = new FormData();
+    formData.append("file", videoData);
+
+    // 비디오 저장 fetch
+    const videoRes = await fetch(`http://localhost:5050/analysis/video`, {
+      method: "POST",
+      // headers: {},
+      body: formData,
+    });
+    if (videoRes.status === 404) {
+      alert("동영상 등록에 실패했습니다.");
+      return;
+    }
+    if (videoRes.status === 413) {
+      alert("영상이 너무 커서 등록에 실패했습니다.");
+      return;
+    }
+
+    // 비디오 저장 경로를 response해주고 그걸 anaysis state에 저장
+    if (videoRes.status === 200) {
+      const vidoeResJson = await videoRes.json();
+      console.log("fetch 반환값 videoJson: ", vidoeResJson);
+
+      const key = Object.keys(vidoeResJson);
+      setAnalysis(key, vidoeResJson[key]);
+      console.log("analysis객체", analysis);
+    }
+
+    // 비디오 썸네일 생성 fetch
+    const thumbnailRes = await fetch(
+      `http://localhost:5050/analysis/thumbnail`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // JSON.stringify 안하면 400오류
+        body: JSON.stringify(analysis),
+      }
+    );
+    if (thumbnailRes.status === 200) {
+      const thumbnailResJson = await thumbnailRes.json();
+      console.log("썸네일 패치 반환값", thumbnailResJson);
+      // 셋팅해주기
+    }
+  };
 
   return (
     <section>
@@ -28,16 +85,40 @@ const Analysis1 = () => {
         </div>
       </div>
       <div class="max-w-xs mx-auto py-6">
-        <label
-          htmlFor="inputVideo"
-          class="block shadow-lg p-20 mb-2 bg-gray-100 text-center hover:bg-gray-200 cursor-pointer"
-        >
-          <div class="inline-block mx-auto mb-6">
-            <FontAwesomeIcon icon={faFileVideo} size={"4x"} color="#909090" />
-          </div>
-          <h3 class="text-sm">영상을 선택해주세요.</h3>
-        </label>
-        <input id="inputVideo" type="file" accept="video/*" class="hidden" />
+        {analysis.videoPath ? (
+          <label
+            htmlFor="inputVideo"
+            class="block border border-slate-300 rounded-md shadow-md p-20 mb-2 bg-sky-100 text-center hover:bg-sky-200 cursor-pointer"
+          >
+            <div class="inline-block mx-auto mb-6">
+              <FontAwesomeIcon
+                icon={faCheckCircle}
+                size={"4x"}
+                color="#76c8ff"
+              />
+            </div>
+            <h3 class="text-sm text-gray-600">{videoFile}</h3>
+            <h3 class="text-sm text-sky-600">영상이 등록되었습니다.</h3>
+          </label>
+        ) : (
+          <label
+            htmlFor="inputVideo"
+            class="block border border-slate-300 rounded-md shadow-md p-20 mb-2 bg-gray-100 text-center hover:bg-gray-200 cursor-pointer"
+          >
+            <div class="inline-block mx-auto mb-6">
+              <FontAwesomeIcon icon={faFileVideo} size={"4x"} color="#909090" />
+            </div>
+            <h3 class="text-sm">영상을 선택해주세요.</h3>
+          </label>
+        )}
+        <input
+          id="inputVideo"
+          name="file"
+          type="file"
+          accept="video/*"
+          class="hidden"
+          onChange={videoFetch}
+        />
       </div>
       <div class="max-w-xs mx-auto">
         <button
