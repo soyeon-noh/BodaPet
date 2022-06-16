@@ -3,9 +3,10 @@ import numpy as np
 import glob
 import copy
 from custom_label import custom_labels
+import json
 
 
-def df_file(save_txt_path): 
+def df_file(save_txt_path):
     txt_path = save_txt_path
 
     # 저장된 텍스트 파일 가져오기
@@ -13,9 +14,11 @@ def df_file(save_txt_path):
     file_list_py = [file for file in file_list if file.endswith(".txt")]
 
     # 텍스트 파일을 데이터 프레임 형태로 불러오기
-    file = pd.read_table(file_list_py[0], header=None, names=['frame','track_id','bbox_left','bbox_top','w','h','cx','cy','2','3','4'], sep=' ')
+    file = pd.read_table(file_list_py[0], header=None,
+                         names=['frame', 'track_id', 'bbox_left', 'bbox_top', 'w', 'h', 'cx', 'cy', '2', '3', '4'],
+                         sep=' ')
     return file
-   
+
 
 def IoU(box1, box2):
     # box = (lx, ly, w, h)
@@ -25,8 +28,8 @@ def IoU(box1, box2):
     # obtain x1, y1, x2, y2 of the intersection
     x1 = max(box1[2], box2[2])
     y1 = max(box1[3], box2[3])
-    x2 = min(box1[2]+box1[4], box2[2]+box1[4])
-    y2 = min(box1[3]+box1[5], box2[3]+box1[5])
+    x2 = min(box1[2] + box1[4], box2[2] + box1[4])
+    y2 = min(box1[3] + box1[5], box2[3] + box1[5])
 
     # compute the width and height of the intersection
     w = max(0, x2 - x1 + 1)
@@ -37,47 +40,55 @@ def IoU(box1, box2):
     return iou
 
 
-def analysis(save_txt_path, iou_fps):
-	file = df_file(save_txt_path)
-	file.drop(['2','3','4'], inplace=True, axis=1)
-	
+def analysis(save_txt_path, iou_fps, dir_path, vid_name):
+    time_dict = {}
+    file = df_file(save_txt_path)
+    file.drop(['2', '3', '4'], inplace=True, axis=1)
 
-	########## 1초 버전
-	move_time = 0
-	time_list = []
+    ########## 1초 버전
+    move_time = 0
+    time_list = []
 
-	for i in range(len(custom_labels)):
-	    ### 각 클래스 별로 불러오기
-	    class_id = (file.track_id == i+1)
-	    # class_file : 클래스 별 필요한 전체 정보
-	    class_file = file[class_id]
-	    # frame : frame 정보만 가져옴
-	    frame = class_file.drop(['track_id','bbox_left','bbox_top','w','h','cx','cy'], inplace=False, axis=1)
-	    # df의 인덱싱을 위해 인덱스 초기화
-	    class_file.reset_index(level=None, drop=True, inplace=False, col_level=0, col_fill='')
-	    frame.reset_index(level=None, drop=True, inplace=False, col_level=0, col_fill='')
-	    np_class_file = class_file.to_numpy()
-	    
-	    ### 프레임 별로 분석
-	    for j in range(len(class_file)):
-	        # 1초 단위로 분석하기 위해 iou_fps 프레임당 한장만 봄
-	        if ( (j+iou_fps) >= len(class_file)):
-	            break
-	        if (j % iou_fps != 0):         
-	            continue
-	        # 영상에서 붙어있는 프레임인지 확인
-	        a = frame.iloc[j,0]
-	        b = frame.iloc[j+iou_fps,0]
-	        if (a+iou_fps != b):
-	            continue
-	            
-	        c = np_class_file[j]
-	        d = np_class_file[j+iou_fps]
-	        iou = IoU(d, c)
-	        if (iou < 0.7):
-	            move_time += 1
-	    time_list.append(move_time)
-	    move_time = 0
+    for i in range(len(custom_labels)):
+        ### 각 클래스 별로 불러오기
+        class_id = (file.track_id == i + 1)
+        # class_file : 클래스 별 필요한 전체 정보
+        class_file = file[class_id]
+        # frame : frame 정보만 가져옴
+        frame = class_file.drop(['track_id', 'bbox_left', 'bbox_top', 'w', 'h', 'cx', 'cy'], inplace=False, axis=1)
+        # df의 인덱싱을 위해 인덱스 초기화
+        class_file.reset_index(level=None, drop=True, inplace=False, col_level=0, col_fill='')
+        frame.reset_index(level=None, drop=True, inplace=False, col_level=0, col_fill='')
+        np_class_file = class_file.to_numpy()
 
-	# print(time_list)
-	return time_list
+        ### 프레임 별로 분석
+        for j in range(len(class_file)):
+            # 1초 단위로 분석하기 위해 iou_fps 프레임당 한장만 봄
+            if ((j + iou_fps) >= len(class_file)):
+                break
+            if (j % iou_fps != 0):
+                continue
+            # 영상에서 붙어있는 프레임인지 확인
+            a = frame.iloc[j, 0]
+            b = frame.iloc[j + iou_fps, 0]
+            if (a + iou_fps != b):
+                continue
+
+            c = np_class_file[j]
+            d = np_class_file[j + iou_fps]
+            iou = IoU(d, c)
+            if (iou < 0.7):
+                move_time += 1
+        time_list.append(move_time)
+        move_time = 0
+
+    for i in range(len(custom_labels)):
+        time_dict[custom_labels[i]] = time_list[i]
+
+    # json 파일 저장
+    save_json_path = str(dir_path) + "/" + str(vid_name) + "_move.json"
+
+    with open(save_json_path, 'w') as outfile:
+        json.dump(time_dict, outfile, ensure_ascii=False, indent=4)
+
+    return time_list

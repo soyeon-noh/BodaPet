@@ -8,30 +8,35 @@ app = Flask(__name__)
 def yolov5():
     # cmd1=("python ai/yolov5/detect.py --source ai/yolov5/data/images/kkamang.mp4")
     reqFilePath = request.args['filePath']
-    temp = "python ai/yolov5/detect.py --source "+reqFilePath
+    reqPetName = request.args['name']
+
+    temp = "python yolov5_deepsort/yolov5/detect.py --source "+reqFilePath +" --name "+reqPetName
     cmd1=(temp)
-    # cmd1=("python ai/yolov5/detect.py --source server/detect_upload/ruby.MOV")
-    # cmd1=(text)
     os.system(cmd1)
+    
+    # cmd1=("python yolov5_deepsort/yolov5/detect.py --source server/detect_upload/ruby.MOV --name ruby")
+    # os.system(cmd1)
     # jsonData = request.get_json()
     
-    reqPetName = request.args['name']
-    print(reqFilePath)
-    print(reqPetName)
+    
+    #print(reqFilePath)
+    #print(reqPetName)
     return "success"
 
 
 @app.route('/vgg/', methods=['GET', 'POST'])
 def vgg():
      # vgg.py 실행
-    cmd2=("python ai/yolov5/vgg.py")
+    cmd2=("python yolov5_deepsort/yolov5/vgg.py")
     os.system(cmd2)
     return "분석완료"
 
 @app.route('/deepsort/', methods=['GET', 'POST'])
 def deepsort():
     # 경로를 모두 현재 py 기준으로 맞춰주어야 함
-    cmd3=("python ai/track.py --source ai/final_test.MOV")
+    place = {"사료": [0, 0, 300, 347, 281, 172], "화장실":[0, 0, 1078, 188, 300, 200]}
+    # cmd3=("python yolov5_deepsort/track.py --source server/deepsort_upload/IMG_4814.MOV --places '{"사료":[0, 0, 300, 347, 281, 172], "화장실":[0, 0, 1078, 188, 300, 200]}' --date 22-06-15")
+    cmd3=("python yolov5_deepsort/track.py --source server/deepsort_upload/IMG_4814.MOV --places " + str(place) + " --date 22-06-15")
     os.system(cmd3)
     return "분석완료"
 

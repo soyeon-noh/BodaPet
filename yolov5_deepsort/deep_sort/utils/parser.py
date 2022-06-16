@@ -34,8 +34,8 @@ def get_config(config_file=None):
 
 
 if __name__ == "__main__":
-    cfg = YamlParser(config_file="../configs/yolov3.yaml")
-    cfg.merge_from_file("../configs/deep_sort.yaml")
+    cfg = YamlParser(config_file="./yolov5_deepsort/deep_sort/configs/yolov3.yaml")
+    cfg.merge_from_file("./yolov5_deepsort/deep_sort/configs/deep_sort.yaml")
 
     import ipdb
     ipdb.set_trace()

@@ -1,5 +1,5 @@
 from keras.preprocessing.image import ImageDataGenerator
-train_dir = 'yolov5/runs/detect'
+train_dir = './yolov5_deepsort/yolov5/runs/detect'
 
 batch_size = 32
 image_size = 224

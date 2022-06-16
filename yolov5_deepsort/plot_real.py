@@ -9,7 +9,7 @@ import cv2
 from custom_label import custom_labels
 
 
-def plot(save_txt_path, dir_path, im):
+def plot(save_txt_path, dir_path, im, vid_name):
     # bgr, rgb 형태로
     im_rgb = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
     # 저장된 텍스트 파일
@@ -54,7 +54,7 @@ def plot(save_txt_path, dir_path, im):
     plt.legend()
 
     # 이미지 저장 경로 수정
-    save_img_path = str(save_dir_path) + "/plot1.png"
+    save_img_path = str(save_dir_path) + "/"+str(vid_name)+"_plot1.png"
     plt.savefig(save_img_path, dpi=300)
 
     # plt 초기화
@@ -75,5 +75,5 @@ def plot(save_txt_path, dir_path, im):
     plt.legend()
 
     # 이미지 저장 경로 수정
-    save_img_path = str(save_dir_path) + "/scatter1.png"
+    save_img_path = str(save_dir_path) + "/"+str(vid_name)+"_scatter1.png"
     plt.savefig(save_img_path, dpi=300)

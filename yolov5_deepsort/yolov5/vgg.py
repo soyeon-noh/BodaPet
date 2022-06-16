@@ -9,7 +9,7 @@ import keras.backend as K
 from keras.applications import vgg16
 from tensorflow import keras
 
-train_dir = 'yolov5/runs/detect'
+train_dir = 'yolov5_deepsort/yolov5/runs/detect'
 
 batch_size = 32
 image_size = 224
@@ -75,5 +75,5 @@ history = model.fit(
       verbose=1)
  
 # 모델 저장
-vgg16_model_path = 'vgg16.h5'
+vgg16_model_path = './yolov5_deepsort/vgg16.h5'
 model.save(vgg16_model_path)
