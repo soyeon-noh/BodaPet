@@ -10,7 +10,7 @@ from .sort.tracker import Tracker
 from .deep.reid_model_factory import show_downloadeable_models, get_model_link, is_model_in_factory, \
     is_model_type_in_model_path, get_model_type, show_supported_models
 
-sys.path.append('deep_sort/deep/reid')
+sys.path.append('./yolov5_deepsort/deep_sort/deep/reid')
 from torchreid.utils import FeatureExtractor
 from torchreid.utils.tools import download_url
 
