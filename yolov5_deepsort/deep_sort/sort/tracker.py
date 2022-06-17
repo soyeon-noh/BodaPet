@@ -202,7 +202,7 @@ class Tracker:
         image = np.resize(im_224_bgr, (1, 224, 224, 3))
 
         # 미리 학습된 vgg16 가져오기 (경로는 상황에 따라 변경해야함  웹과 연동시 db 경로 사용)
-        model = load_model('vgg16.h5')
+        model = load_model('yolov5_deepsort/vgg16.h5')
         yhat = model.predict(image)
 
         # 최대 출력 인덱스를 구한다.

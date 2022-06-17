@@ -24,8 +24,8 @@ router.post("/", async (req, res, next) => {
       uri: "http://localhost:5000/deepsort",
       qs: {
         // userId: analysis.userId,
-        filePath: analysis.videoPath,
-        date: analysis.date,
+        filePath: "server/deepsort_upload/IMG_4814.MOV",
+        date: "22-01-16",
         // time: analysis.time,
         area: {
           사료: [0, 0, 300, 347, 281, 172],

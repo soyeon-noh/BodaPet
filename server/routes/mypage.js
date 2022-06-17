@@ -53,8 +53,8 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
       method: "GET",
       uri: "http://localhost:5000/yolov5",
       qs: {
-        name: "test name",
-        filePath: "server/detect_upload/ruby.MOV",
+        name: "kkamang",
+        filePath: "server/detect_upload/kkamang.mp4",
       },
     };
 
