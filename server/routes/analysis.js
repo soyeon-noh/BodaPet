@@ -17,9 +17,10 @@ router.post("/", async (req, res, next) => {
   const areaInfo = analysis.area;
   console.log("므에엥", areaInfo);
 
+  // 여기
   const YoloResult = (callback) => {
     const options = {
-      method: "GET",
+      method: "POST",
       uri: "http://localhost:5000/deepsort",
       qs: {
         // userId: analysis.userId,

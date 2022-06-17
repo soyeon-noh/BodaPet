@@ -17,6 +17,17 @@ export const DragCanvas = () => {
   // 마우스의 클릭와 놨을때 값
   const [isDraw, setIsDraw] = useState();
 
+  useEffect(() => {
+    if (!canvasRef) return;
+    const ctx = canvasRef.current.getContext("2d");
+    const image = new Image();
+    image.src = "../static/image/rectangle.png";
+
+    image.onload = function () {
+      ctx.drawImage(image, 0, 0);
+    };
+  }, [canvasRef]);
+
   const drawStart = (e) => {
     setIsDraw(true);
     // console.log("e.x", e.clientX - canvasRef.current.offsetLeft);
@@ -34,7 +45,7 @@ export const DragCanvas = () => {
   const drawSquare = (e) => {
     if (!isDraw) return;
     ctx.strokeStyle = "red";
-    // ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     // ctx.strokeRect(0, 0, 50, 50);
     let x = e.clientX - canvasRef.current.offsetLeft;
     let y = e.clientY - canvasRef.current.offsetTop;
