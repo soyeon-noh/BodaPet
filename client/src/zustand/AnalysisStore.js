@@ -6,13 +6,22 @@ const useAnalysisStore = create((set, get) => ({
     thumbnailPath: "",
     videoLength: "",
     userId: "test",
-    area: [{ name: "", coordinate: [] }],
+    area: {},
     date: "",
     time: "",
   },
 
   setAnalysis: (name, value) => {
     set((state) => ({ analysis: { ...get().analysis, [name]: value } }));
+  },
+
+  setAnalysisArea: (name, value) => {
+    set(() => ({
+      analysis: {
+        ...get().analysis,
+        area: { ...get().analysis.area, [name]: value },
+      },
+    }));
   },
 
   onChangeHandler: (e) => {
@@ -24,24 +33,34 @@ const useAnalysisStore = create((set, get) => ({
     console.log(get().analysis);
   },
 
+  draw: "",
+  setDraw: (value) => {
+    set((state) => ({ draw: value }));
+  },
+
+  coordinate: "",
+  setCoordinate: (name, value) => {
+    set((state) => ({ coordinate: { ...get().coordinate, [name]: value } }));
+  },
+
   areaList: [
     {
       id: 1,
       name: "물그릇",
-      color: "red",
-      checked: false,
+      color: "blue",
+      state: "",
     },
     {
       id: 2,
       name: "밥그릇",
-      color: "orange",
-      checked: false,
+      color: "red",
+      state: "",
     },
     {
       id: 3,
       name: "화장실",
       color: "green",
-      checked: false,
+      state: "",
     },
   ],
 
@@ -53,6 +72,9 @@ const useAnalysisStore = create((set, get) => ({
   setFilteredAreaList: (filtered) => {
     set(() => ({ areaList: filtered }));
   },
+
+  incorrect: { color: "red", fontSize: "small" },
+  correct: { color: "blue", fontSize: "small", marginLeft: "8px" },
 }));
 
 export default useAnalysisStore;

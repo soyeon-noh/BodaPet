@@ -20,10 +20,11 @@ const Analysis3 = () => {
   };
 
   const goNext = () => {
+    if (areaList.length < 1) return;
+
     navigate("/analysis4");
   };
-
-  const color = ["red", "orange", "green", "blue", "purple"];
+  const incorrect = { color: "red", fontSize: "small" };
 
   const [area, setArea] = useState({ name: "" });
 
@@ -34,16 +35,41 @@ const Analysis3 = () => {
     console.log("settingArea", area);
   };
 
+  // const getRandomColor = () => {
+  //   return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  // };
+
+  const getRandomColor = () => {
+    let letters = "0123456789ABCDEF";
+    let color = "#";
+
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+
+    return color;
+  };
+
   const insertArea = () => {
-    const areaInfo = {
-      id: areaList.length + 1,
-      name: area.name,
-      color: color.at(areaList.length + 1),
-    };
+    // 배열에 아무것도 없을 경우 기본값을 0으로 만들어서 id가 1부터 시작하도록 함
+    let lastAreaId = 0;
+    // 배열에 1개이상 담겨있을 경우 마지막에 담긴 요소의 id를 추출해 +1 한다.
+    if (areaList.length > 0) {
+      lastAreaId = areaList[areaList.length - 1].id;
+    }
 
-    setAreaList(areaInfo);
+    if (area.name) {
+      const areaInfo = {
+        id: lastAreaId + 1,
+        name: area.name,
+        color: getRandomColor(),
+        state: "",
+      };
 
-    setArea("");
+      setAreaList(areaInfo);
+
+      setArea("");
+    }
   };
 
   const onClickDelete = (id) => {
@@ -52,34 +78,20 @@ const Analysis3 = () => {
   };
 
   const showAreaList = areaList.map((data) => {
-    if (data.checked) {
-      return (
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} color={data.color} />
-          <span class="inline-bolck ml-5 mr-20">{data.name}</span>
-          <FontAwesomeIcon
-            onClick={() => onClickDelete(data.id)}
-            icon={faTrashCan}
-            color={data.color}
-          />
+    return (
+      <div key={data.id} class="felx flex-col justify-between">
+        <div class="inline-block">
+          <FontAwesomeIcon icon={faCircle} color={data.color} />
         </div>
-      );
-    } else {
-      return (
-        <div class="felx flex-col justify-between">
-          <div class="inline-block">
-            <FontAwesomeIcon icon={faCircle} color={data.color} />
-          </div>
-          <div class="inline-block text-left ml-5 mr-7 w-2/5">{data.name}</div>
-          <div
-            class="inline-block cursor-pointer"
-            onClick={() => onClickDelete(data.id)}
-          >
-            <FontAwesomeIcon icon={faTrashCan} color={data.color} />
-          </div>
+        <div class="inline-block text-left ml-5 mr-7 w-2/5">{data.name}</div>
+        <div
+          class="inline-block cursor-pointer"
+          onClick={() => onClickDelete(data.id)}
+        >
+          <FontAwesomeIcon icon={faTrashCan} color="gray" />
         </div>
-      );
-    }
+      </div>
+    );
   });
 
   return (
@@ -97,7 +109,6 @@ const Analysis3 = () => {
       </div>
       <div class="max-w-xs mx-auto py-6">
         <img
-          class="max-w-xs mx-auto py-6 block ml-auto"
           src={rectangle}
           width="320" // 최대로보이는 숫자넣음 수정필요
         />
@@ -119,8 +130,14 @@ const Analysis3 = () => {
               추가
             </button>
           </div>
+          {area.name ? (
+            <></>
+          ) : (
+            <span style={incorrect}>추가할 영역 이름을 작성해주세요.</span>
+          )}
         </div>
       </div>
+
       <div class="flex justify-between max-w-xs mx-auto">
         <button
           onClick={() => goPrevious()}

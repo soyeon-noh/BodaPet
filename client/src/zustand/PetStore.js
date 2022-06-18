@@ -12,7 +12,7 @@ const usePetStore = create((set, get) => ({
     // console.log("set에 값이 들어오긴해 value", value);
     set((state) => ({ pet: { ...get().pet, [name]: value } }));
 
-    console.log("setPet data: ", get().pet);
+    // console.log("setPet data: ", get().pet);
   },
 
   onChangeHandler: (e) => {

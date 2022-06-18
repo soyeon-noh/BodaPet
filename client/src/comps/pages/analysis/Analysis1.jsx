@@ -11,11 +11,14 @@ const Analysis1 = () => {
   const navigate = useNavigate();
 
   const goNext = () => {
-    navigate("/analysis2");
+    if (analysis.videoPath) {
+      getThumbnail();
+
+      navigate("/analysis2");
+    }
   };
 
   const { analysis, setAnalysis } = useAnalysisStore();
-  console.log("analysis1 상태 확인", analysis);
 
   const [videoFile, setVideoFile] = useState(false);
 
@@ -49,12 +52,12 @@ const Analysis1 = () => {
       const vidoeResJson = await videoRes.json();
       console.log("fetch 반환값 videoJson: ", vidoeResJson);
 
-      const key = Object.keys(vidoeResJson);
-      setAnalysis(key, vidoeResJson[key]);
-      console.log("analysis객체", analysis);
+      setAnalysis("videoPath", vidoeResJson.videoPath);
     }
+  };
 
-    // 비디오 썸네일 생성 fetch
+  const getThumbnail = async () => {
+    await console.log("analysis", analysis);
     const thumbnailRes = await fetch(
       `http://localhost:5050/analysis/thumbnail`,
       {
@@ -108,7 +111,7 @@ const Analysis1 = () => {
             <div class="inline-block mx-auto mb-6">
               <FontAwesomeIcon icon={faFileVideo} size={"4x"} color="#909090" />
             </div>
-            <h3 class="text-sm">영상을 선택해주세요.</h3>
+            <h4 class="text-sm">영상을 선택해주세요.</h4>
           </label>
         )}
         <input

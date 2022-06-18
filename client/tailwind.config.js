@@ -23,7 +23,8 @@ module.exports = {
         main: "#EAF7FF",
       },
       fontFamily: {
-        jalnan: ["Jalnan", "sans-serif"],
+        jalnan: ["yg-jalnan"],
+        noto: ["Noto Sans KR", "sans-serif"],
       },
     },
   },

@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAnalysisStore from "../../../zustand/AnalysisStore";
 
 import { DragCanvas } from "../../../config/DragCanvs.jsx";
+import Loading from "../Loading";
 
 const Analysis4 = () => {
   const navigate = useNavigate();
@@ -21,7 +22,13 @@ const Analysis4 = () => {
     setFilteredAreaList,
     analysis,
     setAnalysis,
+    setAnalysisArea,
     onChangeHandler,
+    draw,
+    setDraw,
+    coordinate,
+    correct,
+    incorrect,
   } = useAnalysisStore();
 
   const goPrevious = () => {
@@ -32,57 +39,139 @@ const Analysis4 = () => {
     navigate("/report");
   };
 
-  const onClickDelete = (id) => {
-    let filtered = areaList.filter((element) => element !== id);
+  const processCoordinate = (name) => {
+    const width = Math.abs(coordinate.endX - coordinate.startX);
+    const height = Math.abs(coordinate.endY - coordinate.startY);
+    const pCoordinate = [
+      0,
+      0,
+      coordinate.startX * 6,
+      coordinate.startY * 6,
+      width * 6,
+      height * 6,
+    ];
+    setAnalysisArea(name, pCoordinate);
+    // console.log(pCoordinate);
   };
 
-  const showAreaList = areaList.map((data) => {
-    if (data.checked) {
+  const drawStart = (data, index) => {
+    if (areaList.filter((e) => e.state == "draw").length) {
+      return;
+    }
+    setDraw(data.color);
+    areaList[index].state = "draw";
+  };
+
+  const drawEnd = (data, index) => {
+    if (!coordinate) {
+      return;
+    }
+    setDraw("");
+    areaList[index].state = "complet";
+    processCoordinate(data.name);
+    // console.log(analysis);
+  };
+
+  const reDraw = (data, index) => {
+    if (areaList.filter((e) => e.state == "draw").length) {
+      return;
+    }
+    setDraw(data.color);
+    areaList[index].state = "draw";
+  };
+
+  const showAreaList = areaList.map((data, index) => {
+    if (data.state == "") {
       return (
-        <div class="felx flex-col justify-between">
-          <div class="inline-block">
-            <FontAwesomeIcon icon={faCircleCheck} color={data.color} />
-          </div>
-          <div class="inline-block text-left ml-5 mr-7 w-2/5">{data.name}</div>
-          <div
-            class="inline-block cursor-pointer"
-            onClick={() => onClickDelete(data.id)}
-          >
-            <FontAwesomeIcon icon={faTrashCan} color="#909090" />
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div class="felx flex-col justify-between my-2">
+        <div key={data.id} class="felx flex-col justify-between my-2">
           <div class="inline-block">
             <FontAwesomeIcon icon={faCircle} color={data.color} />
           </div>
-          <div class="inline-block text-left ml-5 mr-7 w-2/5">{data.name}</div>
-          <div
-            class="inline-block cursor-pointer"
-            onClick={() => onClickDelete(data.id)}
+          <div class="inline-block text-left ml-5 mr-4 w-2/5">{data.name}</div>
+          <button
+            onClick={() => drawStart(data, index)}
+            class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 w-24 border border-gray-400 rounded shadow"
           >
-            <FontAwesomeIcon icon={faPenToSquare} color={data.color} />
+            그리기
+          </button>
+        </div>
+      );
+    } else if (data.state == "draw") {
+      return (
+        <div key={data.id} class="felx flex-col justify-between my-2">
+          <div class="inline-block">
+            <FontAwesomeIcon icon={faCircle} color={data.color} />
           </div>
+          <div class="inline-block text-left ml-5 mr-4 w-2/5">{data.name}</div>
+
+          <button
+            onClick={() => drawEnd(data, index)}
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 w-24 border border-blue-500 rounded shadow"
+          >
+            저장하기
+          </button>
+        </div>
+      );
+    } else if (data.state == "complet") {
+      return (
+        <div key={index} class="felx flex-col justify-between my-2">
+          <div class="inline-block">
+            <FontAwesomeIcon icon={faCircleCheck} color="gray" />
+          </div>
+          <div class="inline-block text-left ml-5 mr-4 w-2/5 text-gray-400">
+            {data.name}
+          </div>
+
+          <button
+            onClick={() => reDraw(data, index)}
+            class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-1 w-24 border border-gray-400 rounded shadow"
+          >
+            다시그리기
+          </button>
         </div>
       );
     }
   });
 
+  const [loading, setLoading] = useState(false);
+
   const analysisInsert = async () => {
+    if (areaList.length != Object.keys(analysis.area).length) {
+      return;
+    }
     const analysisRes = await fetch(`http://localhost:5050/analysis`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(analysis),
     });
-    // 수정필요
-    alert("analysis 등록완료");
-    goNext();
+
+    if (analysisRes.status === 404) {
+      alert(`영상분석에 실패했습니다.
+      다시 시도해주세요.`);
+      setLoading(false);
+      return;
+    }
+
+    if (analysisRes.status === 200) {
+      setLoading(true);
+
+      const jsonRes = await analysisRes.json();
+      if (jsonRes == "success") {
+        setLoading(false);
+        alert("analysis 등록완료");
+        goNext();
+      }
+    }
+
+    alert(`영상분석에 실패했습니다.
+      다시 시도해주세요.`);
+    setLoading(false);
   };
 
   return (
     <section>
+      {loading ? <Loading /> : null}
+
       <div class="bg-main py-6 ">
         <div class="max-w-sm mx-auto">
           <div class="text-left pt-14">
@@ -97,11 +186,17 @@ const Analysis4 = () => {
       <div class="max-w-xs mx-auto py-6">
         <DragCanvas />
         <img
-          class="max-w-xs mx-auto py-6 block ml-auto"
           src={rectangle}
           width="320" // 최대로보이는 숫자넣음 수정필요
         />
-        <div class="shadow-lg p-7 mb-2 text-center">{showAreaList}</div>
+        <div class="shadow-lg p-7 mb-2 text-center">
+          {showAreaList}
+          {areaList.length == Object.keys(analysis.area).length ? (
+            <span style={correct}>모든 영역을 그렸습니다.</span>
+          ) : (
+            <span style={incorrect}>모든 영역을 그려주세요.</span>
+          )}
+        </div>
       </div>
       <div class="flex justify-between max-w-xs mx-auto">
         <button
@@ -114,7 +209,7 @@ const Analysis4 = () => {
           onClick={() => analysisInsert()}
           class=" block w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          결과 보기
+          결과보기
         </button>
       </div>
     </section>
