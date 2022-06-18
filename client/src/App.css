@@ -5,14 +5,15 @@
   /* color: #232323; */
 }
 
+div,
+li {
+  /* font-family: "noto"; */
+  color: #232323;
+}
+
 header,
 nav,
 h1 {
   font-family: "jalnan";
-  color: #232323;
-}
-
-div,
-li {
   color: #232323;
 }

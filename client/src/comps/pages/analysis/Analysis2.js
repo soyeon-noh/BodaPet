@@ -6,15 +6,21 @@ import useAnalysisStore from "../../../zustand/AnalysisStore";
 const Analysis2 = () => {
   const navigate = useNavigate();
 
+  const { analysis, setAnalysis, onChangeHandler, incorrect } =
+    useAnalysisStore();
+
   const goPrevious = () => {
+    // setAnalysis("date", "");
+    // setAnalysis("time", "");
     navigate("/analysis1");
   };
 
   const goNext = () => {
-    navigate("/analysis3");
+    if (analysis.date && analysis.time) {
+      navigate("/analysis3");
+      return;
+    }
   };
-
-  const { analysis, setAnalysis, onChangeHandler } = useAnalysisStore();
 
   return (
     <section>
@@ -31,7 +37,6 @@ const Analysis2 = () => {
       </div>
       <div class="max-w-xs mx-auto py-6">
         <img
-          class="max-w-xs mx-auto py-6 block ml-auto"
           src={rectangle}
           width="320" // 최대로보이는 숫자넣음 수정필요
         />
@@ -44,6 +49,7 @@ const Analysis2 = () => {
               type="date"
               name="date"
               class="inline-block w-25"
+              value={analysis.date}
               onChange={onChangeHandler}
             />
           </div>
@@ -55,9 +61,13 @@ const Analysis2 = () => {
               type="time"
               name="time"
               class="inline-block w-25"
+              value={analysis.time}
               onChange={onChangeHandler}
             />
           </div>
+          {analysis.date && analysis.time ? null : (
+            <span style={incorrect}>촬영 일시를 전부 선택해주세요</span>
+          )}
         </div>
       </div>
       <div class="flex justify-between max-w-xs mx-auto">

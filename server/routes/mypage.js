@@ -39,6 +39,9 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
   console.log("비디오패치에 넘겨온 req.file: ", req.file);
   console.log("비디오패치에 넘겨온 req.body: ", req.body);
 
+  console.log("비디오패치에 넘겨온 req.file.path: ", req.file.path);
+  console.log("비디오패치에 넘겨온 req.body.name: ", req.body.name);
+
   // console.log("폼에 정의된 필드명 : ", reqFile.fieldname);
   // console.log("사용자가 업로드한 파일 명 : ", reqFile.originalname);
   // console.log("파일의 엔코딩 타입 : ", reqFile.encoding);
@@ -53,8 +56,8 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
       method: "GET",
       uri: "http://localhost:5000/yolov5",
       qs: {
-        name: "kkamang",
-        filePath: "server/detect_upload/kkamang.mp4",
+        name: req.body.name,
+        filePath: req.file.path,
       },
     };
 
@@ -70,23 +73,18 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
     console.log(`${result}!!!`);
   });
 
-  // const yolov5Fetch = async() =>{
-  //   const res = await fetch(`http://localhost:5000/yolov5`, {
-  //   method:"POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: {"filePath": "test filepath"}
-  // })
-  // if(res.status === 404){
-  //   alert("flask 서버 yolov5 fetch 실패 ")
-  // }
-  // console.log("flask yolov5 fetch 실행완료",res.status);
+  res.json({ success: true, videoPath: req.file.path });
 
-  // }
-  // yolov5Fetch();
-
-  res.json({ videoPath: req.file.path });
+  // 파이썬에서 success 보내오면 아래와같이 수정
+  // YoloResult((err, { result } = {}) => {
+  //   if (err) {
+  //     console.log("error!!!");
+  //   }
+  //   console.log(`${result}!!!`);
+  //   if (result == "success") {
+  //     res.json({ success: true, videoPath: req.file.path });
+  //   }
+  // });
 });
 
 router.get("/vgg", async (req, res, next) => {

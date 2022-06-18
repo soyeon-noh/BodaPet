@@ -10,7 +10,9 @@ function App() {
         <Header />
         <MainNav />
       </div>
-      <Pages />
+      <div class="select-none">
+        <Pages />
+      </div>
     </div>
   );
 }

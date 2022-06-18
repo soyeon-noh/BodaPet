@@ -6,8 +6,6 @@ const useAreaStore = create((get, set) => ({
 
   setArea: (data) => {
     set((state) => ({ name: data }));
-
-    console.log("setArea name: ", get().name);
   },
 
   setCoordinate: (data) => {
