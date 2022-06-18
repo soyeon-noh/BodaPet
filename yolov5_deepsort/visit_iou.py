@@ -44,8 +44,9 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
     # 저장된 파일들 경로
     save_dir_path = dir_path
     # json.loads를 사용해서 딕셔너리 형태로 키: 위치 이름, 값 : 좌표 값
-    place = str(places)
-    place = json.loads(place)
+    places_json = open('./places.json', encoding = 'cp949')
+    places = json.load(places_json)
+
     file = df_file(save_txt_path)
     file.drop(['2', '3', '4'], inplace=True, axis=1)
 
