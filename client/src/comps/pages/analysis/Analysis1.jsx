@@ -78,6 +78,9 @@ const Analysis1 = () => {
 
         return true;
       }
+
+        return false;
+      
     }
   };
 

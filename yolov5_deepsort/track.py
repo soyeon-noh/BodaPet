@@ -338,7 +338,8 @@ if __name__ == '__main__':
     parser.add_argument('--project', default=ROOT / 'runs/track', help='save results to project/name')
     parser.add_argument('--date', default='exp', help='save results to project/date')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
-    parser.add_argument('--places',nargs='+',help='preprocessing as <token>')
+    parser.add_argument('--places', nargs='+', help='preprocessing as <token>')
+    # parser.add_argument('--places', help='preprocessing as <token>')
     opt = parser.parse_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
 

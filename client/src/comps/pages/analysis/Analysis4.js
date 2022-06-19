@@ -202,6 +202,7 @@ const Analysis4 = () => {
       <div class="max-w-xs mx-auto py-6">
         <DragCanvas />
         <img
+                // src={`http://localhost:5050/thumbnails/4812_img.png`}
           src={`http://localhost:5050/${analysis.thumbnailPath}`}
           alt="thumbnail image"
           width="320"

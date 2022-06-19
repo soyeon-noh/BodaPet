@@ -44,8 +44,19 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
     # 저장된 파일들 경로
     save_dir_path = dir_path
     # json.loads를 사용해서 딕셔너리 형태로 키: 위치 이름, 값 : 좌표 값
-    places_json = open('./places.json', encoding = 'cp949')
-    places = json.load(places_json)
+    print(places)
+    # place_ch = places.replace("'","")
+    # # place = places[0]
+    # #print(place)
+    # #place = json.loads(place)
+    # #.replace("'", "\"")
+
+ 
+    #places_json = open('./places.json', encoding="cp949")
+    #places = json.load(places_json)
+
+    with open("./places.json","r") as places_json:
+        places = json.load(places_json)
 
     file = df_file(save_txt_path)
     file.drop(['2', '3', '4'], inplace=True, axis=1)
@@ -54,13 +65,17 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
     visit_time = 0
 
     # 임의로 지정, 웹에서 받아와야 함
-    place_list = list(place.values())  # 위치 좌표 값을 리스트 형태로
+    place_list = list(places.values())  # 위치 좌표 값을 리스트 형태로
 
     place_list = np.array(place_list)
     # [반려동물 별(접근 인덱스)[장소별(접근 인덱스) [방문시간, 횟수]]]
     time_list = np.zeros((len(custom_labels), place_list.shape[0], 2))
 
     for i in range(len(custom_labels)):
+
+
+
+        
         ### 각 클래스 별로 불러오기
         class_id = (file.track_id == i + 1)
         # class_file : 클래스 별 필요한 전체 정보
@@ -99,7 +114,7 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
                 time_list[i, n, 1] = 1
 
     # 위치 정보에 대한 값을 리스트로 (장소 딕셔너리의 키로 사용)
-    space = list(place.keys())
+    space = list(places.keys())
 
     # 객체 별 장소 딕셔너리를 담은 리스트 [{사료 : [시간, 방문횟수], 화장실 :[시간, 방문 횟수]}]
     space_list = []
@@ -115,9 +130,9 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
     place_dict = dict(zip(custom_labels, space_list))
 
     # json 파일 저장 
-    save_json_path = str(save_dir_path) + "/" + str(vid_name) + "_visit.json"
+    save_json_path = str(save_dir_path) + "/visit.json"
 
     with open(save_json_path, 'w') as outfile:
-        json.dump(place_dict, outfile, ensure_ascii=False, indent=4)
+        json.dump(place_dict, outfile,ensure_ascii=False, indent=4)
 
     return (time_list)

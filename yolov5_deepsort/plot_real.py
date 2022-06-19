@@ -75,5 +75,6 @@ def plot(save_txt_path, dir_path, im, vid_name):
     plt.legend()
 
     # 이미지 저장 경로 수정
-    save_img_path = str(save_dir_path) + "/"+str(vid_name)+"_scatter1.png"
+    paths = "server/im"
+    save_img_path = "server/im/scatter.png"
     plt.savefig(save_img_path, dpi=300)

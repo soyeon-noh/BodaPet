@@ -66,25 +66,25 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
     });
   };
 
-  YoloResult((err, { result } = {}) => {
-    if (err) {
-      console.log("error!!!");
-    }
-    console.log(`${result}!!!`);
-  });
-
-  res.json({ success: true, videoPath: req.file.path });
-
-  // 파이썬에서 success 보내오면 아래와같이 수정
   // YoloResult((err, { result } = {}) => {
   //   if (err) {
   //     console.log("error!!!");
   //   }
   //   console.log(`${result}!!!`);
-  //   if (result == "success") {
-  //     res.json({ success: true, videoPath: req.file.path });
-  //   }
   // });
+
+  // res.json({ success: true, videoPath: req.file.path });
+
+  // 파이썬에서 success 보내오면 아래와같이 수정
+  YoloResult((err, { result } = {}) => {
+    if (err) {
+      console.log("error!!!");
+    }
+    console.log(`${result}!!!`);
+    // if (result == "success") {
+    res.json({ success: true, videoPath: req.file.path });
+    // }
+  });
 });
 
 router.get("/vgg", async (req, res, next) => {
@@ -106,6 +106,6 @@ router.get("/vgg", async (req, res, next) => {
     console.log(`${result}!!!`);
   });
 
-  res.send("성공");
+  res.json({ success: true});
 });
 export default router;
