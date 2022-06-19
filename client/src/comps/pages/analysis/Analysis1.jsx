@@ -12,9 +12,12 @@ const Analysis1 = () => {
 
   const goNext = () => {
     if (analysis.videoPath) {
-      getThumbnail();
-
-      navigate("/analysis2");
+      // 썸네일이 제대로 가져와진 경우 다음으로 이동
+      if (getThumbnail()) {
+        navigate("/analysis2");
+      } else {
+        alert("영상처리에 문제가 발생했습니다. 다시 시도해주세요.");
+      }
     }
   };
 
@@ -57,7 +60,7 @@ const Analysis1 = () => {
   };
 
   const getThumbnail = async () => {
-    await console.log("analysis", analysis);
+    console.log("analysis", analysis);
     const thumbnailRes = await fetch(
       `http://localhost:5050/analysis/thumbnail`,
       {
@@ -68,9 +71,13 @@ const Analysis1 = () => {
       }
     );
     if (thumbnailRes.status === 200) {
-      const thumbnailResJson = await thumbnailRes.json();
-      console.log("썸네일 패치 반환값", thumbnailResJson);
-      // 셋팅해주기
+      const jsonRes = await thumbnailRes.json();
+      console.log("썸네일 패치 반환값", jsonRes);
+      if (jsonRes.success) {
+        setAnalysis("thumbnailPath", jsonRes.url);
+
+        return true;
+      }
     }
   };
 

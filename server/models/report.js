@@ -6,18 +6,26 @@ const ReportSchema = mongoose.Schema(
   {
     id: { type: Number, default: 0 },
     userId: { type: String },
-    petId: { type: String },
+
     createdDate: { type: String },
     createdTime: { type: String },
     activity: { type: String },
 
     videoPath: { type: String },
-    heatmaPath: { type: String },
 
-    area: [
+    heatmapPath: { type: String },
+    scatterPath: { type: String },
+
+    report: [
       {
-        name: { type: String },
-        value: { type: Number },
+        petId: { type: String },
+        petName: { type: String },
+        area: [
+          {
+            name: { type: String },
+            value: { type: Number },
+          },
+        ],
       },
     ],
   },
@@ -31,4 +39,4 @@ ReportSchema.plugin(autoIncrement.plugin, {
   increment: 1,
 });
 
-module.exports = mongoose.model("report", ReportSchema);
+export default mongoose.model("report", ReportSchema);

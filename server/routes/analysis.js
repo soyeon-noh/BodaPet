@@ -1,4 +1,5 @@
 import express from "express";
+import REPORT from "../models/report.js";
 import multerUpload from "../config/deepsortFileUploadConfig.js";
 import request from "request";
 import ffmpeg from "fluent-ffmpeg";
@@ -23,14 +24,11 @@ router.post("/", async (req, res, next) => {
       method: "POST",
       uri: "http://localhost:5000/deepsort",
       qs: {
-        // userId: analysis.userId,
-        filePath: "server/deepsort_upload/IMG_4814.MOV",
-        date: "22-01-16",
-        // time: analysis.time,
-        area: {
-          사료: [0, 0, 300, 347, 281, 172],
-          화장실: [0, 0, 1078, 188, 300, 200],
-        },
+        userId: analysis.userId,
+        filePath: analysis.videoPath,
+        date: analysis.date,
+        time: analysis.time,
+        area: analysis.area,
       },
     };
 
@@ -43,11 +41,18 @@ router.post("/", async (req, res, next) => {
     if (err) {
       console.log("error!!!");
     }
-    console.log(`${result}!!!`);
+    console.log(`result: ${result}!!!`);
   });
 
+  console.log("YoloResult 결과 값", YoloResult);
+  const report = {};
+
+  if (report) {
+    await REPORT.create(report);
+  }
+
   // 여기에 파이썬 데이터들 받아서 넘겨줘야함.
-  res.json({ success: true });
+  res.json(report);
 });
 
 router.post("/video", multerUpload.single("file"), async (req, res, next) => {
@@ -77,8 +82,8 @@ router.post("/thumbnail", (req, res) => {
   //비디오 정보 가져오기
   ffmpeg.ffprobe(req.body.videoPath, function (err, metadata) {
     //url을 받으면 해당 비디오에대한 정보가 metadata에담김
-    console.log(metadata); //metadata안에담기는 모든정보들 체킹
-    fileDuration = metadata.format.duration; //동영상길이대입
+    // console.log(metadata); //metadata안에담기는 모든정보들 체킹
+    // fileDuration = metadata.format.duration; //동영상길이대입
   });
   //썸네일 생성
   ffmpeg(req.body.videoPath) //클라이언트에서보낸 비디오저장경로
@@ -88,16 +93,15 @@ router.post("/thumbnail", (req, res) => {
       console.log("will generate " + filenames.join(","));
       console.log("filenames:", filenames);
 
-      filePath = "uploads/thumbnails/" + filenames[0];
+      // static 접근을 위해 uploads/thumbnails/  -> thumbnails/로 변경
+      filePath = "thumbnails/" + filenames[0];
     })
     .on("end", function () {
       console.log("Screenshots taken");
       return res.json({
         success: true,
         url: filePath,
-        fileDuration: fileDuration,
       });
-      //fileDuration :비디오 러닝타임
     })
     .on("error", function (err) {
       console.log(err);
@@ -105,11 +109,11 @@ router.post("/thumbnail", (req, res) => {
     })
     .screenshots({
       //Will take screenshots at 20% 40% 60% and 80% of the video
-      count: 3,
+      count: 1,
       folder: "uploads/thumbnails",
-      size: "320x240",
+      size: "320x180",
       //'%b':input basename(filename w/o extension) = 확장자제외파일명
-      filename: "thumbnail-%b.png",
+      filename: "thumbnail_%b.png",
     });
 });
 

@@ -18,20 +18,21 @@ const Analysis4 = () => {
   const navigate = useNavigate();
   const {
     areaList,
-    setAreaList,
-    setFilteredAreaList,
     analysis,
     setAnalysis,
     setAnalysisArea,
-    onChangeHandler,
     draw,
     setDraw,
     coordinate,
+    resetCoordinate,
     correct,
     incorrect,
   } = useAnalysisStore();
 
   const goPrevious = () => {
+    setAnalysis("area", "");
+    areaList.map((data) => (data.state = ""));
+
     navigate("/analysis3");
   };
 
@@ -51,6 +52,10 @@ const Analysis4 = () => {
       height * 6,
     ];
     setAnalysisArea(name, pCoordinate);
+
+    // 그리기지 않고 저장하기 방지 (coordinate값 리셋)
+    resetCoordinate();
+
     // console.log(pCoordinate);
   };
 
@@ -63,13 +68,15 @@ const Analysis4 = () => {
   };
 
   const drawEnd = (data, index) => {
+    // 그리기지 않고 저장하기 방지 (coordinate값 검사)
     if (!coordinate) {
       return;
     }
     setDraw("");
     areaList[index].state = "complet";
     processCoordinate(data.name);
-    // console.log(analysis);
+    console.log("analysis", analysis);
+    console.log("areaList", areaList);
   };
 
   const reDraw = (data, index) => {
@@ -114,7 +121,7 @@ const Analysis4 = () => {
       );
     } else if (data.state == "complet") {
       return (
-        <div key={index} class="felx flex-col justify-between my-2">
+        <div key={data.id} class="felx flex-col justify-between my-2">
           <div class="inline-block">
             <FontAwesomeIcon icon={faCircleCheck} color="gray" />
           </div>
@@ -146,8 +153,7 @@ const Analysis4 = () => {
     });
 
     if (analysisRes.status === 404) {
-      alert(`영상분석에 실패했습니다.
-      다시 시도해주세요.`);
+      alert("영상분석에 실패했습니다. 다시 시도해주세요.");
       setLoading(false);
       return;
     }
@@ -156,7 +162,17 @@ const Analysis4 = () => {
       setLoading(true);
 
       const jsonRes = await analysisRes.json();
-      if (jsonRes == "success") {
+
+      if (jsonRes) {
+        console.log(jsonRes);
+        console.log(jsonRes.heatmap);
+        console.log(jsonRes.scatter);
+        console.log(jsonRes.move_time);
+        console.log(jsonRes.move_time.kkamang.move_time);
+        console.log(jsonRes.move_time.ruby.move_time);
+        console.log(jsonRes.visit_time);
+        console.log(jsonRes.visit_time.kkamang);
+        console.log(jsonRes.visit_time.ruby);
         setLoading(false);
         alert("analysis 등록완료");
         goNext();
@@ -186,8 +202,9 @@ const Analysis4 = () => {
       <div class="max-w-xs mx-auto py-6">
         <DragCanvas />
         <img
-          src={rectangle}
-          width="320" // 최대로보이는 숫자넣음 수정필요
+          src={`http://localhost:5050/${analysis.thumbnailPath}`}
+          alt="thumbnail image"
+          width="320"
         />
         <div class="shadow-lg p-7 mb-2 text-center">
           {showAreaList}

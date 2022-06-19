@@ -4,7 +4,6 @@ const useAnalysisStore = create((set, get) => ({
   analysis: {
     videoPath: "",
     thumbnailPath: "",
-    videoLength: "",
     userId: "test",
     area: {},
     date: "",
@@ -41,6 +40,9 @@ const useAnalysisStore = create((set, get) => ({
   coordinate: "",
   setCoordinate: (name, value) => {
     set((state) => ({ coordinate: { ...get().coordinate, [name]: value } }));
+  },
+  resetCoordinate: () => {
+    set(() => ({ coordinate: "" }));
   },
 
   areaList: [

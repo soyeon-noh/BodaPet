@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import rectangle from "../../../static/image/rectangle.png";
+
 import useAnalysisStore from "../../../zustand/AnalysisStore";
+
+import Loading from "../Loading";
 
 const Analysis2 = () => {
   const navigate = useNavigate();
@@ -22,8 +24,11 @@ const Analysis2 = () => {
     }
   };
 
+  const [loading, setLoading] = useState(true);
+
   return (
     <section>
+      {loading ? <Loading /> : null}
       <div class="bg-main py-6 ">
         <div class="max-w-sm mx-auto">
           <div class="text-left pt-14">
@@ -37,9 +42,12 @@ const Analysis2 = () => {
       </div>
       <div class="max-w-xs mx-auto py-6">
         <img
-          src={rectangle}
+          src={`http://localhost:5050/${analysis.thumbnailPath}`}
+          alt="thumbnail image"
           width="320" // 최대로보이는 숫자넣음 수정필요
+          onLoad={() => setLoading(false)}
         />
+
         <div class="shadow-lg p-7 mb-2 text-center">
           <div>
             <label class="inline-block ml-0 mr-auto">
