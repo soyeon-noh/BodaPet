@@ -22,6 +22,28 @@ const useUserStore = create((set, get) => ({
       get().setUser([name], value);
     });
   },
+
+  resetUser: () => {
+    set(() => ({
+      user: {
+        userId: "",
+        password: "",
+        email: "",
+      },
+    }));
+  },
+
+  loginUser: "",
+
+  setLoginUser: () => {
+    set(() => ({ loginUser: get().user }));
+  },
+
+  resetLoginUser: () => {
+    set(() => ({
+      loginUser: "",
+    }));
+  },
 }));
 
 export default useUserStore;

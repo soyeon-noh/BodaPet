@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import rectangle from "../../../static/image/rectangle.png";
 
-import {
-  faCircle,
-  faCircleCheck,
-  faTrashCan,
-  faPenToSquare,
-} from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAnalysisStore from "../../../zustand/AnalysisStore";
 
@@ -21,7 +16,7 @@ const Analysis4 = () => {
     analysis,
     setAnalysis,
     setAnalysisArea,
-    draw,
+    resetAnalysis,
     setDraw,
     coordinate,
     resetCoordinate,
@@ -152,7 +147,6 @@ const Analysis4 = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(analysis),
     });
- 
 
     if (analysisRes.status === 404) {
       alert("영상분석에 실패했습니다. 다시 시도해주세요.");
@@ -161,13 +155,12 @@ const Analysis4 = () => {
     }
 
     if (analysisRes.status === 200) {
-
       const res = await analysisRes.json();
       const jsonRes = JSON.parse(res);
-      console.log("프론트에 넘어온 json", res)
-      console.log("프론트에 넘어온 jsonParse", jsonRes)
+      console.log("프론트에 넘어온 json", res);
+      console.log("프론트에 넘어온 jsonParse", jsonRes);
 
-      if(res){
+      if (res) {
         console.log(jsonRes);
         // console.log(jsonRes.heatmap);
         // console.log(jsonRes.scatter);
@@ -177,11 +170,11 @@ const Analysis4 = () => {
         // console.log(jsonRes.visit_time.kka.eat);
         // console.log(jsonRes.visit_time.kka.eat[0]);
         setLoading(false);
+        resetAnalysis();
         alert("analysis 등록완료");
         goNext();
       }
     }
-  
   };
 
   return (
@@ -202,7 +195,7 @@ const Analysis4 = () => {
       <div class="max-w-xs mx-auto py-6">
         <DragCanvas />
         <img
-                // src={`http://localhost:5050/thumbnails/4812_img.png`}
+          // src={`http://localhost:5050/thumbnails/4812_img.png`}
           src={`http://localhost:5050/${analysis.thumbnailPath}`}
           alt="thumbnail image"
           width="320"
