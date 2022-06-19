@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import useUserStore from "../../../zustand/UserStore";
 
 const Login = () => {
-  const { user, onChangeHandler } = useUserStore();
+  const { user, onChangeHandler, resetUser, loginUser, setLoginUser } =
+    useUserStore();
 
   const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ const Login = () => {
       },
       body: JSON.stringify(user),
     };
-    const res = await fetch(`http://localhost:5050/users/login`, fetch_option);
+    const res = await fetch(`http://localhost:5050/user/login`, fetch_option);
     if (res.status === 404) {
       alert("로그인에 문제가 생겼습니다. 다시 시도해주세요.");
       return;
@@ -29,9 +30,20 @@ const Login = () => {
       alert("비밀번호를 확인해주세요");
       return;
     }
+
+    const jsonRes = await res.json();
     console.log("로그인 user", user);
-    alert(`${user.userId}님 환영합니다.`);
-    navigate(`/`);
+    console.log(jsonRes);
+    if (jsonRes.userId) {
+      setLoginUser(jsonRes);
+
+      alert(`${jsonRes.userId}님 환영합니다.`);
+      resetUser();
+
+      navigate(`/`);
+    } else {
+      alert("아이디와 비밀번호를 다시 확인해주세요");
+    }
   };
 
   return (

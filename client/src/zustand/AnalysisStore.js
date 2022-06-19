@@ -22,6 +22,16 @@ const useAnalysisStore = create((set, get) => ({
       },
     }));
   },
+  resetAnalysis: () => {
+    set(() => ({
+      videoPath: "",
+      thumbnailPath: "",
+      userId: "test",
+      area: {},
+      date: "",
+      time: "",
+    }));
+  },
 
   onChangeHandler: (e) => {
     const { name, value } = e.target;

@@ -18,7 +18,6 @@ const ReportSchema = mongoose.Schema(
 
     report: [
       {
-        petId: { type: String },
         petName: { type: String },
         area: [
           {

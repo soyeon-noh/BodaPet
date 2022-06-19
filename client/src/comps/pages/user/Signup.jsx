@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import useUserStore from "../../../zustand/UserStore";
 
 const Signup = () => {
-  const { user, onChangeHandler } = useUserStore();
+  const { user, onChangeHandler, resetUser, loginUser, setLoginUser } =
+    useUserStore();
 
   const navigate = useNavigate();
 
@@ -54,13 +55,15 @@ const Signup = () => {
       },
       body: JSON.stringify(user),
     };
-    const res = await fetch(`http://localhost:5050/users/signup`, fetch_option);
+    const res = await fetch(`http://localhost:5050/user/signup`, fetch_option);
     if (res.status === 404) {
       alert("회원가입에 실패했습니다.");
       return;
     }
-    alert(`${user.userId} 님의 회원가입을 축하합니다.`);
-    navigate(`/`);
+
+    alert(`${user.userId} 님의 회원가입을 환영합니다.`);
+    resetUser();
+    navigate(`/login`);
   };
 
   return (
