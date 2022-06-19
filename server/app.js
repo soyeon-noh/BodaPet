@@ -38,6 +38,11 @@ app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
 );
 
+// 정적 파일 다루기 위한 설정
+// uploads/{나머지 파일경로}
+// = localhost:5050/{나머지 파일경로}
+app.use(express.static("uploads"));
+
 // uploads 폴더에 접근
 app.use("/mypage/voide", express.static("detect_upload"));
 app.use("/mypage", express.static("detect_upload"));
