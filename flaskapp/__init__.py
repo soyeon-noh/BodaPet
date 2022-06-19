@@ -7,6 +7,8 @@ app = Flask(__name__)
 
 @app.route('/yolov5/', methods=['GET', 'POST'])
 def yolov5():
+    print(request)
+    print(request.form)
     # cmd1=("python ai/yolov5/detect.py --source ai/yolov5/data/images/kkamang.mp4")
     reqFilePath = request.args['filePath']
     reqPetName = request.args['name']
@@ -34,26 +36,46 @@ def vgg():
     success = os.popen("python yolov5_deepsort/success.py").read()
     return success
 
-@app.route('/deepsort/', methods=['GET'])
+@app.route('/deepsort', methods=['POST'])
 def deepsort():
     # 경로를 모두 현재 py 기준으로 맞춰주어야 함
-   
-    #print(request.form)
-    #reqVideoPath = request.args['filePath']
-    #reqArea = request.args['area']
-    #reqDate = request.args['date']
-    place = {"eat": [0, 0, 300, 347, 281, 172], "toliet":[0, 0, 1078, 188, 300, 200]}
+    print("ss")
+    print(request.get_json())
+
+
+    reqJson = request.get_json()
+    reqVideoPath = reqJson['filePath']
+    print(reqVideoPath)
+    print(type(reqVideoPath))
+
+    reqArea = reqJson['area']
+    print(reqArea)
+    print(type(reqArea))
+
+    reqDate = reqJson['date']
+    print(reqDate)
+    print(type(reqDate))
+    #reqVideoPath = request.form.get('filePath')
+    #print(type(reqVideoPath))
+    
+    #reqArea = request.form.get('area')
+    #print(type(reqArea))
+
+    #reqDate = request.form.get('date')
+    #print(type(reqDate))
+
+    place = {'eat': [0, 0, 300, 347, 281, 172], 'toliet':[0, 0, 1078, 188, 300, 200]}
     with open("./places.json", 'w') as outfile:
-        json.dump(place, outfile, ensure_ascii=False, indent=4)
-    temp = "python yolov5_deepsort/track.py --source server/deepsort_upload/IMG_4814.MOV --date 22-07-01 --places ./places.json"
-    #temp = "python yolov5_deepsort/yolov5/track.py --source server/"+reqVideoPath +" --date "+reqDate + "--places ./places.json"
+        json.dump(reqArea, outfile, ensure_ascii=False, indent=4)
+    #temp = "python yolov5_deepsort/track.py --source server/deepsort_upload/IMG_4814.MOV --date 22-07-01 --places ./places.json"
+    temp = "python yolov5_deepsort/track.py --source server/"+reqVideoPath +" --date "+reqDate + " --places ./places.json"
     print(temp)
     cmd3 = (temp)
     print(cmd3)
     os.system(cmd3)
 
-    heatmap_path = "server/im/heatmap.png"
-    scatter_path = "server/im/scatter.png"
+    heatmap_path = 'server/im/heatmap.png'
+    scatter_path = 'server/im/scatter.png'
 
     move_time_path = 'yolov5_deepsort/runs/track/22-07-01/move.json'
     visit_time_path = 'yolov5_deepsort/runs/track/22-07-01/visit.json'
@@ -77,7 +99,7 @@ def deepsort():
     #with open(visit_time_path,"r") as visit_time_json :
         #move_time = json.load(visit_time_json, ensure_ascii=False, indent=4)
 
-    return {"heatmap" : heatmap_path, "scatter" : scatter_path, "move_time" : move_time, "visit_time" : visit_time}
+    return {'heatmap' : heatmap_path, 'scatter' : scatter_path, 'move_time' : move_time, 'visit_time' : visit_time}
 
 # @app.route('/deepsort/', methods=['GET', 'POST'])
 # def deepsort():

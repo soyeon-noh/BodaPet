@@ -143,6 +143,7 @@ const Analysis4 = () => {
   const [loading, setLoading] = useState(false);
 
   const analysisInsert = async () => {
+    setLoading(true);
     if (areaList.length != Object.keys(analysis.area).length) {
       return;
     }
@@ -151,6 +152,7 @@ const Analysis4 = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(analysis),
     });
+ 
 
     if (analysisRes.status === 404) {
       alert("영상분석에 실패했습니다. 다시 시도해주세요.");
@@ -159,29 +161,27 @@ const Analysis4 = () => {
     }
 
     if (analysisRes.status === 200) {
-      setLoading(true);
 
-      const jsonRes = await analysisRes.json();
+      const res = await analysisRes.json();
+      const jsonRes = JSON.parse(res);
+      console.log("프론트에 넘어온 json", res)
+      console.log("프론트에 넘어온 jsonParse", jsonRes)
 
-      if (jsonRes) {
+      if(res){
         console.log(jsonRes);
-        console.log(jsonRes.heatmap);
-        console.log(jsonRes.scatter);
-        console.log(jsonRes.move_time);
-        console.log(jsonRes.move_time.kkamang.move_time);
-        console.log(jsonRes.move_time.ruby.move_time);
-        console.log(jsonRes.visit_time);
-        console.log(jsonRes.visit_time.kkamang);
-        console.log(jsonRes.visit_time.ruby);
+        // console.log(jsonRes.heatmap);
+        // console.log(jsonRes.scatter);
+        // console.log(jsonRes.move_time);
+        // console.log(jsonRes.move_time.kka.move_time);
+        // console.log(jsonRes.visit_time);
+        // console.log(jsonRes.visit_time.kka.eat);
+        // console.log(jsonRes.visit_time.kka.eat[0]);
         setLoading(false);
         alert("analysis 등록완료");
         goNext();
       }
     }
-
-    alert(`영상분석에 실패했습니다.
-      다시 시도해주세요.`);
-    setLoading(false);
+  
   };
 
   return (
