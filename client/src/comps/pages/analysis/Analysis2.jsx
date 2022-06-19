@@ -42,6 +42,7 @@ const Analysis2 = () => {
       </div>
       <div class="max-w-xs mx-auto py-6">
         <img
+
           src={`http://localhost:5050/${analysis.thumbnailPath}`}
           alt="thumbnail image"
           width="320" // 최대로보이는 숫자넣음 수정필요

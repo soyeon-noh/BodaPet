@@ -21,13 +21,13 @@ router.post("/", async (req, res, next) => {
   // 여기
   const YoloResult = (callback) => {
     const options = {
-      method: "POST",
+      method: "GET",
       uri: "http://localhost:5000/deepsort",
       qs: {
-        userId: analysis.userId,
+        // userId: analysis.userId,
         filePath: analysis.videoPath,
         date: analysis.date,
-        time: analysis.time,
+        // time: analysis.time,
         area: analysis.area,
       },
     };
@@ -37,22 +37,25 @@ router.post("/", async (req, res, next) => {
     });
   };
 
+  // const report = {};
   YoloResult((err, { result } = {}) => {
     if (err) {
       console.log("error!!!");
     }
     console.log(`result: ${result}!!!`);
+
+    // report = result;
+    res.json({success: true})
   });
+  res.json({success: true})
 
-  console.log("YoloResult 결과 값", YoloResult);
-  const report = {};
-
-  if (report) {
-    await REPORT.create(report);
-  }
+  // if (report) {
+  //   await REPORT.create(report);
+  // }
 
   // 여기에 파이썬 데이터들 받아서 넘겨줘야함.
-  res.json(report);
+  // res.json(report);
+  // res.json({success: true})
 });
 
 router.post("/video", multerUpload.single("file"), async (req, res, next) => {

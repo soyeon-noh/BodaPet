@@ -61,7 +61,9 @@ def make_heatmap(save_txt_path, dir_path, rgb_img, vid_name):
   for i in files_numpy :
     x[int(i[1]),int(i[0])] = 1
   heat_map = ndimage.filters.gaussian_filter(x, sigma=16)
+
   # 이미지 저장 경로 수정
-  save_img_path = str(save_dir_path) + "/"+str(vid_name)+"_heatmap.png"
+  
+  save_img_path = "server/im/heatmap.png"
 
   add(im_rgb, heat_map, alpha=0.6, save=save_img_path, axis = False)

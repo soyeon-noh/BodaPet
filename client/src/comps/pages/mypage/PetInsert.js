@@ -23,6 +23,7 @@ const Mypage = () => {
   const [check, setCheck] = useState(false);
 
   const videoFetch = async () => {
+  
     // 영상 데이터 가져오기
     const videoData = document.getElementById("inputVideo").files[0];
 
@@ -33,6 +34,8 @@ const Mypage = () => {
     formData.append("file", videoData);
     formData.append("name", pet.name);
 
+    setLoading(true);
+
     // 비디오 저장 fetch
     const videoRes = await fetch(`http://localhost:5050/mypage/video`, {
       method: "POST",
@@ -41,6 +44,8 @@ const Mypage = () => {
       },
       body: formData,
     });
+
+
     if (videoRes.status === 404) {
       alert("동영상 등록에 실패했습니다.");
       return;
@@ -53,13 +58,13 @@ const Mypage = () => {
     // 비디오 저장 경로를 response해주고 그걸 pet state에 저장
     if (videoRes.status === 200) {
       const jsonRes = await videoRes.json();
-      setLoading(true);
+     
       setPet("videoPath", jsonRes.videoPath);
-      console.log("pet객체", pet);
 
       if (jsonRes.success) {
         setLoading(false);
       }
+
     }
   };
 

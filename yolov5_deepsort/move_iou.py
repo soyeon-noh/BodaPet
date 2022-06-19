@@ -42,6 +42,7 @@ def IoU(box1, box2):
 
 def analysis(save_txt_path, iou_fps, dir_path, vid_name):
     time_dict = {}
+    move_time_list = []
     file = df_file(save_txt_path)
     file.drop(['2', '3', '4'], inplace=True, axis=1)
 
@@ -83,10 +84,13 @@ def analysis(save_txt_path, iou_fps, dir_path, vid_name):
         move_time = 0
 
     for i in range(len(custom_labels)):
-        time_dict[custom_labels[i]] = time_list[i]
+        move_time_list.append({'move_time': time_list[i]})
+
+    for i in range(len(custom_labels)):
+        time_dict[custom_labels[i]] = move_time_list[i]
 
     # json 파일 저장
-    save_json_path = str(dir_path) + "/" + str(vid_name) + "_move.json"
+    save_json_path = str(dir_path) + "/move.json"
 
     with open(save_json_path, 'w') as outfile:
         json.dump(time_dict, outfile, ensure_ascii=False, indent=4)
