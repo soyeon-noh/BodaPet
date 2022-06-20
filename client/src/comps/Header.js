@@ -25,7 +25,10 @@ const Header = () => {
           <h1
             class="text-gray-400 cursor-pointer hover:bg-gray-100 rounded-full"
             onClick={() => {
-              if (window.confirm("로그아웃 하시겠습니까?")) resetLoginUser();
+              if (window.confirm("로그아웃 하시겠습니까?")) {
+                resetLoginUser();
+                navigate("/");
+              }
             }}
           >
             로그아웃

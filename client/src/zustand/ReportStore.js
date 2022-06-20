@@ -1,18 +1,20 @@
 import create from "zustand";
 
 const useReportStore = create((set) => ({
+  reportId: "",
+  setReportId: (id) => set((state) => ({ reportId: id })),
+
   report: {
+    userId: "",
     date: "",
-    activity: "",
-    area: [
-      {
-        name: "",
-        value: "",
-      },
-    ],
-    video: "",
+    // time:"",
+    move_time: [],
+    visit_time: [],
+    heatmap: "",
+    scatter: "",
   },
-  setUser: (data) => set((state) => ({ user: data })),
+
+  setReport: (reportInfo) => set((state) => ({ report: reportInfo })),
 }));
 
 export default useReportStore;

@@ -1,7 +1,9 @@
 import express from "express";
 import PET from "../models/pet.js";
+import REPORT from "../models/report.js";
 import multerUpload from "../config/detectFileUploadConfig.js";
 import request from "request";
+import report from "../models/report.js";
 
 const router = express.Router();
 
@@ -10,12 +12,14 @@ router.get("/", async (req, res, next) => {
   res.send("/mypage/   respond with a resource");
 });
 
-router.get("/pet", async (req, res, next) => {
+router.get("/pet/:user", async (req, res, next) => {
   // 로그인 성공시 변경할 코드
   // const user = req.user;
-  const user = { userId: "test" };
-  const pets = await PET.find({ userId: user.userId });
-  console.log("pet get 데이터", pets);
+  // const user = { userId: "test" };
+
+  const userId = req.params.user;
+  console.log("pet get 데이터 userId", userId);
+  const pets = await PET.find({ userId: userId });
 
   res.json({ pets });
 });
@@ -23,7 +27,7 @@ router.get("/pet", async (req, res, next) => {
 router.post("/pet", async (req, res, next) => {
   // 로그인 성공시 변경할 코드
   // const user = req.user;
-  const user = { userId: "test" };
+  // const user = { userId: "test" };
   console.log("pet post 데이터- ", req.body);
   console.log("pet req.file 데이터- ", req.file);
   const petJson = req.body;
@@ -32,6 +36,21 @@ router.post("/pet", async (req, res, next) => {
 
   await PET.create(petJson);
   res.json({ success: true });
+});
+
+router.post("/petDelete", async (req, res, next) => {
+  const petJson = req.body;
+  const { petId } = petJson;
+  await PET.deleteOne({ petId: petId });
+  res.json({ success: true });
+});
+
+router.get("/user/:user", async (req, res, next) => {
+  const { user } = req.params;
+
+  const reportList = await REPORT.find({ userId: user });
+  const dateList = reportList.map((report) => report.date);
+  res.json({ dateList });
 });
 
 router.post("/video", multerUpload.single("file"), async (req, res, next) => {
@@ -106,6 +125,6 @@ router.get("/vgg", async (req, res, next) => {
     console.log(`${result}!!!`);
   });
 
-  res.json({ success: true});
+  res.json({ success: true });
 });
 export default router;

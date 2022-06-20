@@ -12,7 +12,8 @@ import Login from "./pages/user/Login";
 import Signup from "./pages/user/Signup";
 import Mypage from "./pages/mypage/Mypage";
 import Report from "./pages/Report";
-import PetInsert from "./pages/mypage/PetInsert";
+import PetInsert2 from "./pages/mypage/PetInsert2";
+import PetInsert1 from "./pages/mypage/PetInsert1";
 
 const Pages = () => {
   return (
@@ -29,7 +30,8 @@ const Pages = () => {
         <Route path="/analysis4" element={<Analysis4 />} />
         <Route path="/report" element={<Report />} />
         <Route path="/mypage" element={<Mypage />} />
-        <Route path="/pet" element={<PetInsert />} />
+        <Route path="/petList" element={<PetInsert1 />} />
+        <Route path="/petInsert" element={<PetInsert2 />} />
       </Routes>
     </section>
   );
