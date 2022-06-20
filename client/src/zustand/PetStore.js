@@ -22,6 +22,22 @@ const usePetStore = create((set, get) => ({
       get().setPet([name], value);
     });
   },
+
+  resetPet: () => {
+    set(() => ({
+      pet: {
+        id: "",
+        userId: "test",
+        name: "",
+        videoPath: "",
+      },
+    }));
+  },
+
+  petList: [],
+  setPetList: (data) => {
+    set((state) => ({ petList: data }));
+  },
 }));
 
 export default usePetStore;

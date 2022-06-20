@@ -7,26 +7,15 @@ const ReportSchema = mongoose.Schema(
     id: { type: Number, default: 0 },
     userId: { type: String },
 
-    createdDate: { type: String },
-    createdTime: { type: String },
-    activity: { type: String },
+    date: { type: String },
+    // createdTime: { type: String },
+    move_time: [],
+    visit_time: [],
 
-    videoPath: { type: String },
+    // videoPath: { type: String },
 
-    heatmapPath: { type: String },
-    scatterPath: { type: String },
-
-    report: [
-      {
-        petName: { type: String },
-        area: [
-          {
-            name: { type: String },
-            value: { type: Number },
-          },
-        ],
-      },
-    ],
+    heatmap: { type: String },
+    scatter: { type: String },
   },
   { timestamps: true }
 );
