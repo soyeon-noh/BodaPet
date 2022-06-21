@@ -59,9 +59,9 @@ iou_fps = 0
 def detect(opt):
     global a
 
-    date,places,out, source, yolo_model, deep_sort_model, show_vid, save_vid, save_txt, imgsz, evaluate, half, \
+    rns,date,places,out, source, yolo_model, deep_sort_model, show_vid, save_vid, save_txt, imgsz, evaluate, half, \
     project, exist_ok, update, save_crop = \
-        opt.date,opt.places,opt.output, opt.source, opt.yolo_model, opt.deep_sort_model, opt.show_vid, opt.save_vid, \
+        opt.rns,opt.date,opt.places,opt.output, opt.source, opt.yolo_model, opt.deep_sort_model, opt.show_vid, opt.save_vid, \
         opt.save_txt, opt.imgsz, opt.evaluate, opt.half, opt.project, opt.exist_ok, opt.update, opt.save_crop
     webcam = source == '0' or source.startswith(
         'rtsp') or source.startswith('http') or source.endswith('.txt')
@@ -292,21 +292,20 @@ def detect(opt):
     # 분석할 동영상 이름 (해당 동영상 이름으로 결과물 저장하기 위해서)
     vid_name = p.stem
 
+    import heat_map
+    heat_map.make_heatmap(save_txt_path, dir_path, rgb_img, vid_name, rns)
+    
     import plot_real
-    plot_real.plot(save_txt_path, dir_path, rgb_img, vid_name)
+    plot_real.plot(save_txt_path, dir_path, rgb_img, vid_name, rns)
+
 
     import move_iou
-    move_iou.analysis(save_txt_path, iou_fps,dir_path,vid_name)
-    
+    move_iou.analysis(save_txt_path, iou_fps,dir_path,vid_name, rns)
+
 
     import visit_iou
-    visit_iou.analysis(save_txt_path, iou_fps, places,dir_path, vid_name)
-
-    import heat_map
-    heat_map.make_heatmap(save_txt_path, dir_path, rgb_img, vid_name)
+    visit_iou.analysis(save_txt_path, iou_fps, places,dir_path, vid_name, rns)
     
-
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -339,7 +338,7 @@ if __name__ == '__main__':
     parser.add_argument('--date', default='exp', help='save results to project/date')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--places', nargs='+', help='preprocessing as <token>')
-    # parser.add_argument('--places', help='preprocessing as <token>')
+    parser.add_argument('--rns', help='preprocessing as <token>')
     opt = parser.parse_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
 

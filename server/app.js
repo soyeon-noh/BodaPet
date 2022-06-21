@@ -42,6 +42,7 @@ app.use(
 // uploads/{나머지 파일경로}
 // = localhost:5050/{나머지 파일경로}
 app.use(express.static("uploads"));
+app.use(express.static("im"));
 
 // uploads 폴더에 접근
 app.use("/mypage/voide", express.static("detect_upload"));

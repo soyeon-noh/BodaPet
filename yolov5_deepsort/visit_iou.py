@@ -40,23 +40,16 @@ def IoU(box1, box2):
     return iou
 
 
-def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
+def analysis(save_txt_path, iou_fps, places, dir_path, vid_name, rns):
     # 저장된 파일들 경로
     save_dir_path = dir_path
     # json.loads를 사용해서 딕셔너리 형태로 키: 위치 이름, 값 : 좌표 값
-    print(places)
-    # place_ch = places.replace("'","")
-    # # place = places[0]
-    # #print(place)
-    # #place = json.loads(place)
-    # #.replace("'", "\"")
 
- 
-    #places_json = open('./places.json', encoding="cp949")
-    #places = json.load(places_json)
 
-    with open("./places.json","r") as places_json:
+    with open("./places.json","r", encoding='UTF-8') as places_json:
         places = json.load(places_json)
+        place = json.dumps(places, ensure_ascii=False)
+
 
     file = df_file(save_txt_path)
     file.drop(['2', '3', '4'], inplace=True, axis=1)
@@ -129,10 +122,10 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name):
     # 객체 정보 까지 담은 장소 딕셔너리 {kkamang :{사료 : [시간, 방문횟수], 화장실 :[시간, 방문 횟수]}, ruby :{화장실 : [시간, 방문횟수], 사료 :[시간, 방문 횟수]} }
     place_dict = dict(zip(custom_labels, space_list))
 
-    # json 파일 저장 
-    save_json_path = str(save_dir_path) + "/visit.json"
+    # 난수_visit.json 파일 저장 경로 
+    save_json_path = str(save_dir_path)+"/"+rns+"_visit.json"
 
-    with open(save_json_path, 'w') as outfile:
+    with open(save_json_path, 'w', encoding='utf-8') as outfile:
         json.dump(place_dict, outfile,ensure_ascii=False, indent=4)
 
     return (time_list)

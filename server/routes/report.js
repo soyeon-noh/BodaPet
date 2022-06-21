@@ -8,6 +8,8 @@ router.get("/date/:date/user/:user", async (req, res, next) => {
   const { date, user } = req.params;
 
   const report = await REPORT.findOne({ date: date, userId: user });
+
+  console.log("get /report report", report)
   res.json(report);
 });
 

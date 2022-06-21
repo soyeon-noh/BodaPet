@@ -35,7 +35,7 @@ def add(image, heat_map, alpha=0.6, display=False, save=None, cmap='viridis', ax
             print('save image: ' + save)
         plt.savefig(save, bbox_inches='tight', pad_inches=0, dpi=300)
 
-def make_heatmap(save_txt_path, dir_path, rgb_img, vid_name):
+def make_heatmap(save_txt_path, dir_path, rgb_img, vid_name, rns):
   # bgr, rgb 형태로
   im_rgb = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2RGB)
   # 저장된 텍스트 파일
@@ -62,8 +62,8 @@ def make_heatmap(save_txt_path, dir_path, rgb_img, vid_name):
     x[int(i[1]),int(i[0])] = 1
   heat_map = ndimage.filters.gaussian_filter(x, sigma=16)
 
-  # 이미지 저장 경로 수정
+  # 히트맵 이미지 저장 경로
   
-  save_img_path = "server/im/heatmap.png"
+  save_img_path = "server/uploads/im/"+rns+"_heatmap.png"
 
   add(im_rgb, heat_map, alpha=0.6, save=save_img_path, axis = False)

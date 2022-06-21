@@ -79,12 +79,12 @@ const Mypage = () => {
     console.log(moment(e).format("YYYY-MM-DD"));
     const date = moment(e).format("YYYY-MM-DD");
     const res = await fetch(
-      `http://localhost:5050/mypage/date/${date}/user/${loginUser.userId}/`
+      `http://localhost:5050/report/date/${date}/user/${loginUser.userId}/`
     );
     const resJson = await res.json();
-    setReport(resJson.report);
-    console.log("resJson: ", resJson.report);
-    console.log("petList: ", dateList);
+    await setReport(resJson);
+    console.log("resJson: ", resJson);
+    console.log(report);
 
     navigate(`/report`);
   };
@@ -132,12 +132,16 @@ const Mypage = () => {
               }
             }}
           />
-          <button
-            onClick={() => movePetList()}
-            class="block ml-auto my-8 bg-white hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded shadow"
-          >
-            반려동물 다시 등록하기
-          </button>
+          {petList.length > 0 ? (
+            <button
+              onClick={() => movePetList()}
+              class="block ml-auto my-8 bg-white hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded shadow"
+            >
+              반려동물 다시 등록하기
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </section>

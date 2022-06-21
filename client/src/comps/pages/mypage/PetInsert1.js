@@ -78,6 +78,7 @@ const PetInsert1 = () => {
 
     if (vggRes.status == 200) {
       setLoading(false);
+      navigate("/mypage")
     }
   };
 

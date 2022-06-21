@@ -156,12 +156,12 @@ const Analysis4 = () => {
 
     if (analysisRes.status === 200) {
       const res = await analysisRes.json();
-      const jsonRes = JSON.parse(res);
+ 
       console.log("프론트에 넘어온 json", res);
-      console.log("프론트에 넘어온 jsonParse", jsonRes);
+   
 
       if (res) {
-        console.log(jsonRes);
+        console.log(res);
         // console.log(jsonRes.heatmap);
         // console.log(jsonRes.scatter);
         // console.log(jsonRes.move_time);
@@ -171,8 +171,8 @@ const Analysis4 = () => {
         // console.log(jsonRes.visit_time.kka.eat[0]);
         setLoading(false);
         resetAnalysis();
-        alert("analysis 등록완료");
-        goNext();
+        alert("영상분석 결과 등록완료");
+        navigate("/mypage")
       }
     }
   };
