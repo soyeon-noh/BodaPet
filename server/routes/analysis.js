@@ -18,8 +18,10 @@ router.post("/", async (req, res, next) => {
   const areaInfo = analysis.area;
   console.log("analysis/ areaInfo", areaInfo);
 
+  let reportData;
+
   // 여기
-  const YoloResult = (callback) => {
+  const YoloResult = async (callback) => {
     const options = {
       method: "POST",
       uri: "http://localhost:5000/deepsort",
@@ -42,10 +44,31 @@ router.post("/", async (req, res, next) => {
       console.log("error!!!");
     }
     console.log(`result: ${result}!!!`);
+
+    // 문자열형 json
     const json = JSON.stringify(result);
-    console.log(json);
-    res.status(200).json(json)
+
+    // json 
+    reportData = JSON.parse(json);
+    reportData.userId = analysis.userId;
+    reportData.date = analysis.date;
+
+    console.log("reportData 확인", reportData)
+    console.log("area확인 ", reportData.visit_time[0].area)
+
+    if(result){
+      // db 저장
+
+      REPORT.create(reportData)
+      console.log("DB저장 완료 ")
+    }
+
+    res.json({success:true})
   });
+
+
+
+
 });
 
 router.post("/video", multerUpload.single("file"), async (req, res, next) => {

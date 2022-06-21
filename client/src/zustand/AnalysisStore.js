@@ -23,7 +23,7 @@ const useAnalysisStore = create((set, get) => ({
     }));
   },
   resetAnalysis: () => {
-    set(() => ({
+    set((state) => ({
       videoPath: "",
       thumbnailPath: "",
       userId: "test",

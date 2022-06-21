@@ -11,7 +11,7 @@ from tensorflow import keras
 
 train_dir = 'yolov5_deepsort/yolov5/runs/detect'
 
-batch_size = 32
+batch_size = 8
 image_size = 224
 
 # 학습에 사용될 이미지 데이터 생성기
@@ -69,7 +69,7 @@ model.compile(loss='categorical_crossentropy',
 history = model.fit(
       train_generator,
       steps_per_epoch=train_generator.samples/train_generator.batch_size ,
-      epochs=5,
+      epochs=2,
       #validation_data=validation_generator,
       #validation_steps=validation_generator.samples/validation_generator.batch_size,
       verbose=1)

@@ -7,9 +7,12 @@ import glob
 import cv2
 # custom_labels 불러오기
 from custom_label import custom_labels
+#한글 폰트 사용
+#from matplotlib import font_manager,rc
+#import matplotlib
 
 
-def plot(save_txt_path, dir_path, im, vid_name):
+def plot(save_txt_path, dir_path, im, vid_name, rns):
     # bgr, rgb 형태로
     im_rgb = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
     # 저장된 텍스트 파일
@@ -39,26 +42,13 @@ def plot(save_txt_path, dir_path, im, vid_name):
         globals()["ob_x{}".format(i)] = globals()["object{}".format(i)]['cx'].values.tolist()
         globals()["ob_y{}".format(i)] = globals()["object{}".format(i)]['cy'].values.tolist()
 
-    # 각 객체 별로 이동 경로 plot으로 형태로 출력 (색깔은 랜덤)
-    for i in np.sort(file['track_id'].unique()):
-        use_color ="#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
-        if use_color in colors:
-          use_color ="#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
-        plt.plot(globals()["ob_x{}".format(i)], globals()["ob_y{}".format(i)], color=use_color,
-                 label=custom_labels[i - 1], linewidth=4)
-        plt.axis('off')
-        colors.append(use_color)
+    #폰트 경로
+    #font_path = "NanumGothic.ttf"
 
-    # track.py 에서 저장한 첫 프레임 이미지 사용
-    plt.imshow(im_rgb)
-    plt.legend()
-
-    # 이미지 저장 경로 수정
-    save_img_path = str(save_dir_path) + "/"+str(vid_name)+"_plot1.png"
-    plt.savefig(save_img_path, dpi=300)
-
-    # plt 초기화
-    plt.clf()
+    #폰트 이름 얻어오기
+    #font_name = font_manager.FontProperties(fname=font_path).get_name()
+    #font 설정
+    #matplotlib.rc('font',family=font_name)
 
     # 각 객체 별 산점도 형태 출력 (색깔은 랜덤) 색깔은 우선 랜덤으로 했는데 custom_label 반복문으로 색깔 미리 지정해도 괜찮을듯?
     for i in np.sort(file['track_id'].unique()):
@@ -74,7 +64,6 @@ def plot(save_txt_path, dir_path, im, vid_name):
     plt.imshow(im_rgb)
     plt.legend()
 
-    # 이미지 저장 경로 수정
-    paths = "server/im"
-    save_img_path = "server/im/scatter.png"
-    plt.savefig(save_img_path, dpi=300)
+    # scatter 이미지 저장 경로
+    save_img_path = "server/uploads/im/"+rns+"_scatter.png"
+    plt.savefig(save_img_path, dpi=300, bbox_inches="tight")

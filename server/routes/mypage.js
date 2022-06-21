@@ -123,8 +123,9 @@ router.get("/vgg", async (req, res, next) => {
       console.log("error!!!");
     }
     console.log(`${result}!!!`);
+    res.json({ success: true });
   });
 
-  res.json({ success: true });
+
 });
 export default router;

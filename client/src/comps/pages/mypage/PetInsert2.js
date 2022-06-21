@@ -61,6 +61,8 @@ const PetInsert2 = () => {
 
       setPet("videoPath", jsonRes.videoPath);
 
+
+      
       if (jsonRes.success) {
         setLoading(false);
       }
@@ -68,7 +70,7 @@ const PetInsert2 = () => {
   };
 
   const petInsert = async () => {
-    if (pet.name.length < 1 || pet.name.length > 3) {
+    if (pet.name.length < 1 || pet.name.length > 9) {
       refName.current.focus();
       return;
     }
