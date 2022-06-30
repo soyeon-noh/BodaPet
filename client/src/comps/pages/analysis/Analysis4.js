@@ -8,6 +8,7 @@ import useAnalysisStore from "../../../zustand/AnalysisStore";
 
 import { DragCanvas } from "../../../config/DragCanvs.jsx";
 import Loading from "../Loading";
+import useUserStore from "../../../zustand/UserStore";
 
 const Analysis4 = () => {
   const navigate = useNavigate();
@@ -142,6 +143,7 @@ const Analysis4 = () => {
     if (areaList.length != Object.keys(analysis.area).length) {
       return;
     }
+
     const analysisRes = await fetch(`http://localhost:5050/analysis`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -156,9 +158,8 @@ const Analysis4 = () => {
 
     if (analysisRes.status === 200) {
       const res = await analysisRes.json();
- 
+
       console.log("프론트에 넘어온 json", res);
-   
 
       if (res) {
         console.log(res);
@@ -172,7 +173,7 @@ const Analysis4 = () => {
         setLoading(false);
         resetAnalysis();
         alert("영상분석 결과 등록완료");
-        navigate("/mypage")
+        navigate("/mypage");
       }
     }
   };

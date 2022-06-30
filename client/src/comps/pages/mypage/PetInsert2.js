@@ -61,8 +61,9 @@ const PetInsert2 = () => {
 
       setPet("videoPath", jsonRes.videoPath);
 
+      // 유저를 왜 여기서 설정해야 삽입이 되는걸까. petInsert함수에서 사용하는 법 찾아보기.
+      setPet("userId", loginUser.userId);
 
-      
       if (jsonRes.success) {
         setLoading(false);
       }
@@ -78,7 +79,7 @@ const PetInsert2 = () => {
       alert("영상을 등록해주세요.");
       return;
     }
-    setPet("userId", loginUser.userId);
+
     console.log("펫체크 : ", pet);
 
     // pet 정보 DB insert fetch
@@ -94,6 +95,7 @@ const PetInsert2 = () => {
       return;
     }
     alert(`${pet.name} 이 등록되었습니다.`);
+
     resetPet();
     navigate(`/petList`);
   };

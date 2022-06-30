@@ -3,7 +3,7 @@ import create from "zustand";
 const usePetStore = create((set, get) => ({
   pet: {
     id: "",
-    userId: "test",
+    userId: "",
     name: "",
     videoPath: "",
   },
@@ -12,7 +12,7 @@ const usePetStore = create((set, get) => ({
     // console.log("set에 값이 들어오긴해 value", value);
     set((state) => ({ pet: { ...get().pet, [name]: value } }));
 
-    // console.log("setPet data: ", get().pet);
+    console.log("setPet data: ", get().pet);
   },
 
   onChangeHandler: (e) => {
@@ -27,7 +27,7 @@ const usePetStore = create((set, get) => ({
     set(() => ({
       pet: {
         id: "",
-        userId: "test",
+        userId: "",
         name: "",
         videoPath: "",
       },

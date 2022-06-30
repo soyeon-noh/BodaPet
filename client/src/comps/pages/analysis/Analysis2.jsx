@@ -42,7 +42,6 @@ const Analysis2 = () => {
       </div>
       <div class="max-w-xs mx-auto py-6">
         <img
-
           src={`http://localhost:5050/${analysis.thumbnailPath}`}
           alt="thumbnail image"
           width="320" // 최대로보이는 숫자넣음 수정필요
@@ -51,7 +50,7 @@ const Analysis2 = () => {
 
         <div class="shadow-lg p-7 mb-2 text-center">
           <div>
-            <label class="inline-block ml-0 mr-auto">
+            <label clss="inline-block ml-0 mr-auto">
               {/* <FontAwesomeIcon icon={faCalendar} color="#909090" /> */}
             </label>
             <input
