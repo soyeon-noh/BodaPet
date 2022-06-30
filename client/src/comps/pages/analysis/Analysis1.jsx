@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAnalysisStore from "../../../zustand/AnalysisStore";
+import useUserStore from "../../../zustand/UserStore";
 
 const Analysis1 = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Analysis1 = () => {
   };
 
   const { analysis, setAnalysis } = useAnalysisStore();
+  const { loginUser } = useUserStore();
 
   const [videoFile, setVideoFile] = useState(false);
 
@@ -56,6 +58,9 @@ const Analysis1 = () => {
       console.log("fetch 반환값 videoJson: ", vidoeResJson);
 
       setAnalysis("videoPath", vidoeResJson.videoPath);
+
+      // 유저 셋팅 미리해주기
+      setAnalysis("userId", loginUser.userId);
     }
   };
 
@@ -79,8 +84,7 @@ const Analysis1 = () => {
         return true;
       }
 
-        return false;
-      
+      return false;
     }
   };
 

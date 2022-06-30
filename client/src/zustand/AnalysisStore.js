@@ -4,7 +4,7 @@ const useAnalysisStore = create((set, get) => ({
   analysis: {
     videoPath: "",
     thumbnailPath: "",
-    userId: "test",
+    userId: "",
     area: {},
     date: "",
     time: "",
@@ -26,7 +26,7 @@ const useAnalysisStore = create((set, get) => ({
     set((state) => ({
       videoPath: "",
       thumbnailPath: "",
-      userId: "test",
+      userId: "",
       area: {},
       date: "",
       time: "",
