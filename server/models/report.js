@@ -8,7 +8,7 @@ const ReportSchema = mongoose.Schema(
     userId: { type: String },
 
     date: { type: String },
-    // createdTime: { type: String },
+    time: { type: String },
     move_time: [],
     visit_time: [],
 

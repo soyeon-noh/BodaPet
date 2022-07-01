@@ -73,7 +73,7 @@ const Mypage = () => {
     getReportDate();
   }, [setDateList]);
 
-  const { report, setReport } = useReportStore();
+  const { report, setReport, setReportTimeList } = useReportStore();
 
   const moveReport = async (e) => {
     console.log(moment(e).format("YYYY-MM-DD"));
@@ -82,7 +82,10 @@ const Mypage = () => {
       `http://localhost:5050/report/date/${date}/user/${loginUser.userId}/`
     );
     const resJson = await res.json();
-    await setReport(resJson);
+
+    // await setReport(resJson);
+
+    await setReportTimeList(resJson);
     console.log("resJson: ", resJson);
     console.log(report);
 

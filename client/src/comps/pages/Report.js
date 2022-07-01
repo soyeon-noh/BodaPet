@@ -5,63 +5,31 @@ import useReportStore from "../../zustand/ReportStore";
 const Report = () => {
   const navigate = useNavigate();
 
-  const goPrevious = () => {
-    navigate("/analysis3");
+  const { report, setReport, setReportId, reportTimeList } = useReportStore();
+
+  const moveReportPage = async (e) => {
+    const id = e.target.id;
+
+    const res = await fetch(`http://localhost:5050/report/id/${id}`);
+    const resJson = await res.json();
+    console.log("report가 잘 넘어오나 ", resJson);
+    await setReport(resJson);
+    navigate("/report2");
   };
 
-  const goNext = () => {
-    navigate("/analysis5");
-  };
-
-  const { report, setReport } = useReportStore();
-
-
-  const moveTimeList = report.move_time.map((data, index) => {
-    // console.log("data",data);
+  const timeListBox = reportTimeList.map((report) => {
     return (
-      <div key={index} class="shadow-md p-7 mb-5 text-center">
-        <h1 class="text-left text-blue-300">{data[0]}</h1>
-        <div>
-          <div>오늘 총 {data[1]}초 움직였어요! 🥰</div>
-        </div>
+      <div
+        key={report.id}
+        id={report.id}
+        onClick={(e) => {
+          moveReportPage(e);
+        }}
+        class="my-2 bg-sky-100 text-gray-600 rounded-lg h-16 w-full flex items-center justify-center  mx-2 border border-solid border-sky-300 hover:bg-sky-200 cursor-pointer"
+      >
+        {report.time}
       </div>
     );
-
-  });
-
-
-
-  const visitTimeList = report.visit_time.map((data, index) => {
-    console.log(data)
-
-    
-    const areaList = data.area.map((mapData,index)=>{
-      return(     
-        <div >
-          <span class=" text-left mr-14">{mapData.name}</span>
-          <span>총 {mapData.value[0]}초</span>
-          <span class="ml-3">총 {mapData.value[1]}회</span>
-      </div>)
-    })
-    return(          
-    <div class="shadow-md p-7 mb-5 text-left">
-      <h1 class="text-left text-blue-300">{data.name}</h1>
-      <div class="flex ml-6 flex-col">
-        {areaList}
-        {/* <div >
-          <span class=" text-left mr-14">{data.area[0].name}</span>
-          <span>총 {data.area[0].value[0]}초</span>
-          <span class="ml-3">총 {data.area[0].value[1]}회</span>
-        </div> */}
-        {/* <div>
-          <span class="text-left mr-14">{data.area[1].name}</span>
-          <span>총 {data.area[1].value[0]}초</span>
-          <span class="ml-3">총 {data.area[1].value[1]}회</span>
-        </div> */}
-      </div>
-    </div>)
-  
-
   });
 
   return (
@@ -80,23 +48,7 @@ const Report = () => {
         </div>
       </div>
 
-      <div class="max-w-xs mx-auto py-6">
-        <h1 class="text-xl mb-3 text-gray-800">활동량</h1>
-        {moveTimeList}
-
-        <h1 class="text-xl mb-3 text-gray-800">영역감지</h1>
-        {visitTimeList}
-
-        <h1 class="text-xl mb-3 text-gray-800">히트맵</h1>
-
-        <div class="shadow-md p-1 mb-5 text-center">
-          <img width={320} src={`http://localhost:5050/${report.heatmap}`}></img>
-        </div>
-        <h1 class="text-xl mb-3 text-gray-800">이동 경로</h1>
-        <div class="shadow-md p-1 mb-5 text-center">
-          <img width={320} src={`http://localhost:5050/${report.scatter}`}></img>
-        </div>
-      </div>
+      <div class="max-w-xs mx-auto py-6">{timeListBox}</div>
     </section>
   );
 };

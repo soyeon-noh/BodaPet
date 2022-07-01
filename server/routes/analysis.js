@@ -25,12 +25,12 @@ router.post("/", async (req, res, next) => {
     const options = {
       method: "POST",
       uri: "http://localhost:5000/deepsort",
-      body:{
+      body: {
         filePath: analysis.videoPath,
         date: analysis.date,
         area: analysis.area,
       },
-      json:true,
+      json: true,
     };
 
     request(options, (err, res, body) => {
@@ -48,27 +48,24 @@ router.post("/", async (req, res, next) => {
     // 문자열형 json
     const json = JSON.stringify(result);
 
-    // json 
+    // json
     reportData = JSON.parse(json);
     reportData.userId = analysis.userId;
     reportData.date = analysis.date;
+    reportData.time = analysis.time;
 
-    console.log("reportData 확인", reportData)
-    console.log("area확인 ", reportData.visit_time[0].area)
+    console.log("reportData 확인", reportData);
+    console.log("area확인 ", reportData.visit_time[0].area);
 
-    if(result){
+    if (result) {
       // db 저장
 
-      REPORT.create(reportData)
-      console.log("DB저장 완료 ")
+      REPORT.create(reportData);
+      console.log("DB저장 완료 ");
     }
 
-    res.json({success:true})
+    res.json({ success: true });
   });
-
-
-
-
 });
 
 router.post("/video", multerUpload.single("file"), async (req, res, next) => {
