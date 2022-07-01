@@ -4,28 +4,37 @@ const router = express.Router();
 
 /* GET users listing. */
 
-router.get("/date/:date/user/:user", async (req, res, next) => {
-  const { date, user } = req.params;
+router.get("/id/:id", async (req, res) => {
+  const { id } = req.params;
 
-  const report = await REPORT.findOne({ date: date, userId: user });
+  const report = await REPORT.findOne({ id: id });
+  console.log("get /report id_report", report);
 
-  console.log("get /report report", report)
   res.json(report);
 });
 
-// router.get("/:date/:user", async (req, res, next) => {
-//   const { date } = req.params;
+router.get("/date/:date/user/:user", async (req, res, next) => {
+  const { date, user } = req.params;
 
-//   const report = await REPORT.findOne({ date: date });
-//   res.json({report});
-// });
+  const report = await REPORT.find({ date: date, userId: user });
 
-// router.get("/date/:date/user/:user", async (req, res, next) => {
-//   const { date, user } = req.params;
+  console.log("get /report day_report", report);
 
-//   const reportList = await REPORT.find({ userId: user, date: date });
-//   const dateList = reportList.map((report) => report.date);
-//   res.json({ dateList });
-// });
+  const reportTimeList = [];
+  report.forEach((data) => {
+    reportTimeList.push({ id: data.id, time: data.time, date: data.date });
+  });
+  console.log("report.js reportTimeList: ", reportTimeList);
+  res.json(reportTimeList);
+});
+
+router.get("/date/:date/user/:user/time/:time", async (req, res, next) => {
+  const { date, user, time } = req.params;
+
+  const report = await REPORT.find({ date: date, userId: user, time });
+
+  console.log("get /report time_report", report);
+  res.json(report);
+});
 
 export default router;

@@ -1,8 +1,11 @@
 import create from "zustand";
 
-const useReportStore = create((set) => ({
+const useReportStore = create((set, get) => ({
   reportId: "",
   setReportId: (id) => set((state) => ({ reportId: id })),
+
+  reportTimeList: [], // {id, time}
+  setReportTimeList: (times) => set(() => ({ reportTimeList: times })),
 
   report: {
     userId: "",
@@ -12,6 +15,8 @@ const useReportStore = create((set) => ({
     visit_time: [],
     heatmap: "",
     scatter: "",
+    // heatmap: [],
+    // scatter: [],
   },
 
   setReport: (reportInfo) => set((state) => ({ report: reportInfo })),
