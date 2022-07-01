@@ -132,3 +132,6 @@ dist
 .MOV
 .rtf
 .mp4
+
+# 이미지
+/uploads/thumbnails/*
