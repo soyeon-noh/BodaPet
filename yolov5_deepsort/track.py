@@ -21,7 +21,6 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 import numpy as np
-from custom_label import custom_labels
 import json
 
 from yolov5.models.experimental import attempt_load
@@ -59,9 +58,9 @@ iou_fps = 0
 def detect(opt):
     global a
 
-    rns,date,places,out, source, yolo_model, deep_sort_model, show_vid, save_vid, save_txt, imgsz, evaluate, half, \
+    uid,rns,date,places,out, source, yolo_model, deep_sort_model, show_vid, save_vid, save_txt, imgsz, evaluate, half, \
     project, exist_ok, update, save_crop = \
-        opt.rns,opt.date,opt.places,opt.output, opt.source, opt.yolo_model, opt.deep_sort_model, opt.show_vid, opt.save_vid, \
+        opt.uid,opt.rns,opt.date,opt.places,opt.output, opt.source, opt.yolo_model, opt.deep_sort_model, opt.show_vid, opt.save_vid, \
         opt.save_txt, opt.imgsz, opt.evaluate, opt.half, opt.project, opt.exist_ok, opt.update, opt.save_crop
     webcam = source == '0' or source.startswith(
         'rtsp') or source.startswith('http') or source.endswith('.txt')
@@ -214,7 +213,7 @@ def detect(opt):
 
                 # pass detections to deepsort
                 t4 = time_sync()
-                outputs[i] = deepsort_list[i].update(xywhs.cpu(), confs.cpu(), clss.cpu(), im0)
+                outputs[i] = deepsort_list[i].update(xywhs.cpu(), confs.cpu(), clss.cpu(), im0,uid)
                 t5 = time_sync()
                 dt[3] += t5 - t4
 
@@ -243,7 +242,7 @@ def detect(opt):
 
                         if save_vid or save_crop or show_vid:  # Add bbox to image
                             c = int(cls)  # integer class
-                            label = f'{custom_labels[int(id)-1]} {names[c]} {conf:.2f}'
+                            label = f'{id} {names[c]} {conf:.2f}'
                             annotator.box_label(bboxes, label, color=colors(c, True))
                             if save_crop:
                                 txt_file_name = txt_file_name if (isinstance(path, list) and len(path) > 1) else ''
@@ -339,6 +338,7 @@ if __name__ == '__main__':
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--places', nargs='+', help='preprocessing as <token>')
     parser.add_argument('--rns', help='preprocessing as <token>')
+    parser.add_argument('--uid', help='preprocessing as <token>')
     opt = parser.parse_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
 

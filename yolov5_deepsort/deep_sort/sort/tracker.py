@@ -5,7 +5,7 @@ from . import kalman_filter
 from . import linear_assignment
 from . import iou_matching
 from .track import Track
-from custom_label import custom_labels
+import json
 
 # 저장된 weight 가져와서 모델 불러오기 (저장된 모델을 불러오기)
 from keras.models import load_model
@@ -15,8 +15,12 @@ from PIL import Image
 
 import cv2
 
+with open("./petNames.json", 'r', encoding='utf-8') as f:
+    name_data=json.load(f)
+pet_label = name_data['petName']
+
 # 레이블 딕셔너리 (ex {까망:0, 루비 :1})
-class_dict = {string: i for i, string in enumerate(custom_labels)}
+class_dict = {string: i for i, string in enumerate(pet_label)}
 
 
 class Tracker:
@@ -71,7 +75,7 @@ class Tracker:
             track.increment_age()
             track.mark_missed()
 
-    def update(self, detections, classes, confidences, bbox_xywh, ori_img):
+    def update(self, detections, classes, confidences, bbox_xywh, ori_img, uid):
         """Perform measurement update and track management.
 
         Parameters
@@ -95,7 +99,7 @@ class Tracker:
             # 일단 cx, cy 다음 기준일 때만 detect 되게
             if (145 < cx < ori_img.shape[1] - 200) & (cy <= ori_img.shape[0] - 225):
                 self._initiate_track(detections[detection_idx], classes[detection_idx].item(),
-                                     confidences[detection_idx].item(), bbox_xywh[detection_idx], ori_img)
+                                     confidences[detection_idx].item(), bbox_xywh[detection_idx], ori_img, uid)
 
         self.tracks = [t for t in self.tracks if not t.is_deleted()]
 
@@ -179,7 +183,7 @@ class Tracker:
         unmatched_tracks = list(set(unmatched_tracks_a + unmatched_tracks_b))
         return matches, unmatched_tracks, unmatched_detections
 
-    def predict_custom_vgg16(self, im):
+    def predict_custom_vgg16(self, im, uid):
         # 예측된 레이블 명 (ex: kkamang)
         predict_labels = 0
 
@@ -201,18 +205,18 @@ class Tracker:
         # ndarray (다차원 배열 1,224,224,3 형태로 변경)
         image = np.resize(im_224_bgr, (1, 224, 224, 3))
 
-        # 미리 학습된 vgg16 가져오기 (경로는 상황에 따라 변경해야함  웹과 연동시 db 경로 사용)
-        model = load_model('yolov5_deepsort/vgg16.h5')
+        model_path = 'yolov5_deepsort/id/'+str(uid)+'/vgg16.h5'
+        model = load_model(model_path)
         yhat = model.predict(image)
 
         # 최대 출력 인덱스를 구한다.
         idx = np.argmax(yhat[0])
 
         # 커스텀 레이블을 출력한다.
-        predict_labels = custom_labels[idx]
+        predict_labels = pet_label[idx]
         return predict_labels
 
-    def _initiate_track(self, detection, class_id, conf, xywh, ori_img):
+    def _initiate_track(self, detection, class_id, conf, xywh, ori_img, uid):
         height, width = ori_img.shape[:2]
         x, y, w, h = xywh
         x1 = max(int(x - w / 2), 0)
@@ -220,7 +224,7 @@ class Tracker:
         y1 = max(int(y - h / 2), 0)
         y2 = min(int(y + h / 2), height - 1)
         im = ori_img[y1:y2, x1:x2]
-        result = self.predict_custom_vgg16(im)
+        result = self.predict_custom_vgg16(im,uid)
         if result in class_dict:
             self._next_id = class_dict[result] + 1
         else:

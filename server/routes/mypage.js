@@ -106,11 +106,16 @@ router.post("/video", multerUpload.single("file"), async (req, res, next) => {
   });
 });
 
-router.get("/vgg", async (req, res, next) => {
+router.get("/vgg/userId/:userId", async (req, res, next) => {
+  const {userId} = req.params;
   const YoloResult = (callback) => {
     const options = {
       method: "GET",
       uri: "http://localhost:5000/vgg",
+      qs: {
+        userId: userId,
+      }
+
     };
 
     request(options, (err, res, body) => {

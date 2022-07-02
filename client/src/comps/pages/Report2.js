@@ -60,8 +60,7 @@ const Report2 = () => {
               {report.date}
             </h1>
             <div class="flex items-end">
-              <h1 class="text-gray-800">오늘의 </h1>
-              <h1 class="mx-3 text-xl text-gray-800">리포트</h1>
+              <h1 class="mx-3 text-xl text-gray-800">{report.time}</h1>
             </div>
           </div>
         </div>

@@ -2,9 +2,7 @@ import pandas as pd
 import numpy as np
 import glob
 import copy
-from custom_label import custom_labels
 import json
-
 
 def df_file(save_txt_path):
     txt_path = save_txt_path
@@ -41,6 +39,9 @@ def IoU(box1, box2):
 
 
 def analysis(save_txt_path, iou_fps, dir_path, vid_name, rns):
+    with open("./petNames.json", 'r', encoding='utf-8') as f:
+        name_data=json.load(f)
+    pet_label = name_data['petName']
     time_dict = {}
     move_time_list = []
     file = df_file(save_txt_path)
@@ -50,7 +51,7 @@ def analysis(save_txt_path, iou_fps, dir_path, vid_name, rns):
     move_time = 0
     time_list = []
 
-    for i in range(len(custom_labels)):
+    for i in range(len(pet_label)):
         ### 각 클래스 별로 불러오기
         class_id = (file.track_id == i + 1)
         # class_file : 클래스 별 필요한 전체 정보
@@ -86,8 +87,8 @@ def analysis(save_txt_path, iou_fps, dir_path, vid_name, rns):
    # for i in range(len(custom_labels)):
         #move_time_list.append({'move_time': time_list[i]})
 
-    for i in range(len(custom_labels)):
-        time_dict[custom_labels[i]] = time_list[i]
+    for i in range(len(pet_label)):
+        time_dict[pet_label[i]] = time_list[i]
 
     # 난수_move.json 파일 저장 경로
     save_json_path = str(dir_path)+"/"+rns+"_move.json"

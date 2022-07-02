@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 import glob
 import copy
-from deep_sort.sort.tracker import custom_labels
+
 import json
+
 
 
 def df_file(save_txt_path):
@@ -41,6 +42,9 @@ def IoU(box1, box2):
 
 
 def analysis(save_txt_path, iou_fps, places, dir_path, vid_name, rns):
+    with open("./petNames.json", 'r', encoding='utf-8') as f:
+        name_data=json.load(f)
+    pet_label = name_data['petName']
     # 저장된 파일들 경로
     save_dir_path = dir_path
     # json.loads를 사용해서 딕셔너리 형태로 키: 위치 이름, 값 : 좌표 값
@@ -62,9 +66,9 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name, rns):
 
     place_list = np.array(place_list)
     # [반려동물 별(접근 인덱스)[장소별(접근 인덱스) [방문시간, 횟수]]]
-    time_list = np.zeros((len(custom_labels), place_list.shape[0], 2))
+    time_list = np.zeros((len(pet_label), place_list.shape[0], 2))
 
-    for i in range(len(custom_labels)):
+    for i in range(len(pet_label)):
 
 
 
@@ -116,11 +120,11 @@ def analysis(save_txt_path, iou_fps, places, dir_path, vid_name, rns):
     ls_time_list = time_list.tolist()
 
     # 객체 별 장소 딕셔너리를 담은 리스트 [{사료 : [시간, 방문횟수], 화장실 :[시간, 방문 횟수]}]
-    for i in range(len(custom_labels)):
+    for i in range(len(pet_label)):
         space_list.append(dict(zip(space, list(ls_time_list[i]))))
 
     # 객체 정보 까지 담은 장소 딕셔너리 {kkamang :{사료 : [시간, 방문횟수], 화장실 :[시간, 방문 횟수]}, ruby :{화장실 : [시간, 방문횟수], 사료 :[시간, 방문 횟수]} }
-    place_dict = dict(zip(custom_labels, space_list))
+    place_dict = dict(zip(pet_label, space_list))
 
     # 난수_visit.json 파일 저장 경로 
     save_json_path = str(save_dir_path)+"/"+rns+"_visit.json"

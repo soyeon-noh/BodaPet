@@ -74,7 +74,7 @@ const PetInsert1 = () => {
   const vggFetch = async () => {
     setLoading(true);
     console.log("vgg Fetch 진입");
-    const vggRes = await fetch(`http://localhost:5050/mypage/vgg`);
+    const vggRes = await fetch(`http://localhost:5050/mypage/vgg/userId/${loginUser.userId}`);
 
     if (vggRes.status == 200) {
       setLoading(false);
