@@ -30,7 +30,11 @@ def yolov5():
 @app.route('/vgg/', methods=['GET', 'POST'])
 def vgg():
     # vgg.py 실행
-    cmd2=("python yolov5_deepsort/yolov5/vgg.py")
+
+    # userid
+    reqUserId = request.args['userId']
+    temp = "python yolov5_deepsort/yolov5/vgg.py --uid "+reqUserId
+    cmd2=(temp)
     os.system(cmd2)
     success = os.popen("python yolov5_deepsort/success.py").read()
     return success
@@ -53,16 +57,23 @@ def deepsort():
     reqArea = reqJson['area']
     # 날짜
     reqDate = reqJson['date']
+    # 유저 아이디
+    reqUserId = reqJson['userId']
+    # 반려동물 이름
+    reqPetNames = reqJson['petNames']
+
+
     place = {'밥그릇': [0, 0, 300, 347, 281, 172], '화장실':[0, 0, 1078, 188, 300, 200]}
     with open("./places.json", 'w', encoding='utf-8') as outfile:
         json.dump(reqArea, outfile, ensure_ascii=False, indent=4)
-    
 
-    temp = "python yolov5_deepsort/track.py --source server/"+reqVideoPath +" --date "+reqDate + " --places ./places.json --rns " + st_val 
+    pet_name = {'petName':reqPetNames}
+    with open("./petNames.json", 'w', encoding='utf-8') as outfile:
+        json.dump(pet_name, outfile, ensure_ascii=False, indent=4)
+    temp = "python yolov5_deepsort/track.py --source server/"+reqVideoPath +" --date "+reqDate + " --places ./places.json --rns " + st_val +" --uid "+reqUserId
     cmd3 = (temp)
 
     os.system(cmd3)
- 
 
    
     # 히트맵 경로
@@ -70,36 +81,29 @@ def deepsort():
     # 스캐터 경로
     scatter_path = 'im/'+st_val+'_scatter.png'
 
-
     move_time_path = 'yolov5_deepsort/runs/track/'+reqDate+'/'+st_val+'_move.json'
     visit_time_path = 'yolov5_deepsort/runs/track/'+reqDate+'/'+st_val+'_visit.json'
-
 
 
     with open(move_time_path,"r", encoding='UTF-8') as move_time_json:
         move_time = json.load(move_time_json)
         
-
     move_time_list = []
     move_keys_list = list(move_time.keys())
     move_values_list = list(move_time.values())
     for i in range(len(move_time.keys())):
         move_time_list.append([move_keys_list[i], move_values_list[i]])
        
-  
    
     with open(visit_time_path,"r", encoding='UTF-8') as visit_time_json:
         visit_time = json.load(visit_time_json)
         
-    
     vt_k_ls = list(visit_time.keys())
     vt_v_ls = list(visit_time.values())
-
 
     # 반복문으로 반려 동물의 등록 갯수 만큼 갱신 되게
     vt_v_ls_f_k_ls = list(vt_v_ls[0].keys())
     
-
 
     area_list = []
     
@@ -124,11 +128,15 @@ def deepsort():
             for k in range(2):
                 visit_time_list[i]['area'][j]['value'][k]=int(visit_time_list[i]['area'][j]['value'][k])
 
+    temp2 = "python yolov5_deepsort/data_clear.py"
+    cmd4=(temp2)
+    os.system(cmd4)
+
 
     return {'heatmap' : heatmap_path, 'scatter' : scatter_path, 'move_time' : move_time_list, 'visit_time': visit_time_list}
 
 
 
-    
+
 if __name__ == '__main__':
     app.run(debug=True)

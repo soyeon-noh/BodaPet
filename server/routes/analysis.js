@@ -3,6 +3,7 @@ import REPORT from "../models/report.js";
 import multerUpload from "../config/deepsortFileUploadConfig.js";
 import request from "request";
 import ffmpeg from "fluent-ffmpeg";
+import fetch from "node-fetch"
 
 const router = express.Router();
 
@@ -15,13 +16,28 @@ router.post("/", async (req, res, next) => {
   const analysis = req.body;
   console.log("analysis/ analysis", analysis);
 
+  const petRes = await fetch(
+    `http://localhost:5050/mypage/pet/${analysis.userId}`
+  );
+  const petList = await petRes.json();
+  const arrPetList = petList.pets;
+  // console.log("펫 리스트 확인해보자!!!", arrPetList)
+  // let arrPetName = []
+  const arrPetNameList = arrPetList.map((pet)=>{
+    // console.log("펫네임", pet.name)
+    return pet.name;
+  })
+  // console.log("펫 이름들 잘 넘어오나 확인해보자!! ", arrPetNameList)
+
+
   const areaInfo = analysis.area;
   console.log("analysis/ areaInfo", areaInfo);
 
   let reportData;
-
   // 여기
   const YoloResult = async (callback) => {
+
+
     const options = {
       method: "POST",
       uri: "http://localhost:5000/deepsort",
@@ -29,6 +45,8 @@ router.post("/", async (req, res, next) => {
         filePath: analysis.videoPath,
         date: analysis.date,
         area: analysis.area,
+        userId: analysis.userId,
+        petNames: arrPetNameList,
       },
       json: true,
     };

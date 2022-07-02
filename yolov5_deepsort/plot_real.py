@@ -6,7 +6,7 @@ import random
 import glob
 import cv2
 # custom_labels 불러오기
-from custom_label import custom_labels
+import json
 #한글 폰트 사용
 #from matplotlib import font_manager,rc
 #import matplotlib
@@ -50,19 +50,26 @@ def plot(save_txt_path, dir_path, im, vid_name, rns):
     #font 설정
     #matplotlib.rc('font',family=font_name)
 
+    with open("./petNames.json", 'r', encoding='utf-8') as f:
+        name_data=json.load(f)
+    pet_label = name_data['petName']
+ 
+
+
     # 각 객체 별 산점도 형태 출력 (색깔은 랜덤) 색깔은 우선 랜덤으로 했는데 custom_label 반복문으로 색깔 미리 지정해도 괜찮을듯?
     for i in np.sort(file['track_id'].unique()):
         use_color ="#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
         if use_color in colors:
           use_color ="#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
         plt.scatter(globals()["ob_x{}".format(i)], globals()["ob_y{}".format(i)], color=use_color, alpha=0.06,
-                    label=custom_labels[i - 1])
+                    label=pet_label[i - 1])
         plt.axis('off')
         colors.append(use_color)
 
     # track.py 에서 저장한 첫 프레임 이미지 사용
     plt.imshow(im_rgb)
     plt.legend()
+
 
     # scatter 이미지 저장 경로
     save_img_path = "server/uploads/im/"+rns+"_scatter.png"
